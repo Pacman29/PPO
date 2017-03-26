@@ -1,0 +1,15 @@
+{
+  "name": "kube",
+  "homepage": "https://github.com/imperavi/kube",
+  "version": "6.5.2",
+  "_release": "6.5.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "v6.5.2",
+    "commit": "bc88d0802bee12e56a4e6966e4b005eecce36d0b"
+  },
+  "_source": "https://github.com/imperavi/kube.git",
+  "_target": "^6.5.2",
+  "_originalSource": "https://github.com/imperavi/kube.git",
+  "_direct": true
+}

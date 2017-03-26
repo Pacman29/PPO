@@ -1,0 +1,35 @@
+extends layout
+
+block content
+
+  div.row.auto
+    div.col
+      input(id="btn_load" type="file")
+    div.col
+      button(id="btn_save")= "SaveFile"
+    div.col
+      button(id="btn_parse")= "Parse"
+
+  div
+    code#textfield= "this will be file text"
+
+
+  //fileuploader
+  script(src="javascripts/fileuploader/baseFileUpLoader.js")
+  script(src="javascripts/fileuploader/baseFileUpLoaderImpl.js")
+  script(src="javascripts/fileuploader/FileUpLoader.js")
+  script(src="javascripts/fileuploader/impl/jsonFileUpLoader.js")
+
+  //filedownloader
+  script(src="javascripts/filedownloader/baseFileDownLoader.js")
+  script(src="javascripts/filedownloader/baseFileDownLoaderImpl.js")
+  script(src="javascripts/filedownloader/FileDownLoader.js")
+  script(src="javascripts/filedownloader/impl/jsonFileDownLoader.js")
+
+  //Student
+  script(src="javascripts/objects/baseObject.js")
+  script(src="javascripts/objects/baseCommand.js")
+  script(src="javascripts/Student/Student.js")
+  script(src="javascripts/Group/Group.js")
+
+  script(src="javascripts/main.js")
