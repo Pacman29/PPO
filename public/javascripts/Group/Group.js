@@ -22,6 +22,36 @@
         };
     }
 
+    class ChangeHead extends window.__space.baseCommand{
+        constructor(Students,id){
+            super("ChangeRole");
+            this.students = Students;
+            this.id = id || null;
+            this.oldheadid = -1;
+        }
+
+        execute(){
+            this.oldheadid = this.students.findIndex(item => {
+                return item.get("Role") === "head";
+            });
+            debugger;
+            if(this.oldheadid === -1){
+                return;
+            }
+
+            this.students.get(this.oldheadid).set("Role","student");
+            this.students.get(id).set("Role","head");
+        }
+
+        unexecute(){
+            if(this.oldheadid === -1){
+                return;
+            }
+            this.students.get(this.oldheadid).set("Role","head");
+            this.students.get(id).set("Role","student");
+        }
+    }
+
 
     class Group extends window.__space.baseObject{
         constructor(opt){
@@ -31,14 +61,16 @@
             });
 
             super(tmp,"Group");
+            this.groupname = this.fields[0].get("Group");
         }
 
         setGroupname_all(name){
-            if(name === this.fields[0].get("Group")){
+            if(name === this.groupname){
                 return;
             }
             let command = new window.__space.GroupCommands["ChangeGroupname_all"](this.fields,name);
             command.execute();
+            this.groupname = name;
             this.undo_stack.push(command);
             if(this.redo_stack.length > 0){
                 this.redo_stack.splice(0,this.redo_stack.length);

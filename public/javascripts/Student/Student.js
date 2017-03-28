@@ -28,7 +28,7 @@
                   SecondName: "",
                   Rating: 0,
                   Group: "",
-                  Role: ""
+                  Role: "student"
               },"Student");
       }
 
