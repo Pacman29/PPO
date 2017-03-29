@@ -4,7 +4,7 @@
 (function () {
     class ChangeField extends window.__space.baseCommand{
     constructor(fields,change_field,value){
-        super("ChangeField");
+        super("ChangeField_St");
         this.fields = fields;
         this.change_field = change_field;
         this.value = value;
@@ -42,10 +42,7 @@
             }
             let command = new window.__space.StudentCommands["ChangeField"](this.fields,field,value);
             command.execute();
-            this.undo_stack.push(command);
-            if(this.redo_stack.length > 0){
-                this.redo_stack.splice(0,this.redo_stack.length);
-            }
+            this.push_command(command);
         }
 
         get(field){

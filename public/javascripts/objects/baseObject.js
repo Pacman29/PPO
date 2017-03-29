@@ -8,6 +8,7 @@
             this.redo_stack = new Array();
             this.fields = opt;
             this.objname = objname;
+            console.log("Create "+this.objname);
         }
 
         undo(){
@@ -26,6 +27,13 @@
             let command = this.redo_stack.pop();
             command.execute();
             this.undo_stack.push(command);
+        }
+
+        push_command(command){
+            this.undo_stack.push(command);
+            if(this.redo_stack.length > 0){
+                this.redo_stack.splice(0,this.redo_stack.length);
+            }
         }
     }
 
