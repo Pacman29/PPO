@@ -7,6 +7,7 @@
 
         constructor(commandname){
             this._commandname = commandname || "baseCommand";
+            this._result = null;
             console.log(this.commandname);
         }
         get commandname() {
@@ -18,6 +19,10 @@
         unexecute(){
             throw "unExecute not implements";
         };
+
+        get result(){
+            return this._result;
+        }
     }
 
     window.__space.baseCommand = baseCommand;

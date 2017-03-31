@@ -6,11 +6,6 @@
         constructor(Impl){
             super(Impl);
         }
-
-        setImpl(Impl){
-            this.impl = Impl;
-        }
-
     }
 
     window.__space.FileUpLoader = FileUpLoader;

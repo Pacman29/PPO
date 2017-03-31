@@ -1,10 +1,9 @@
 /**
- * Created by pacman29 on 19.03.17.
+ * Created by pacman29 on 30.03.17.
  */
 (function () {
-    class baseFileDownLoader{
+    class baseConverter{
         constructor(){
-
         }
 
         json(){
@@ -16,5 +15,5 @@
         }
     }
 
-    window.__space.baseFileDownLoader = baseFileDownLoader;
+    window.__space.baseConverter = baseConverter;
 }());

@@ -26,7 +26,19 @@
     });
 
     btn_parse.addEventListener("click",(event) => {
-       var obj = JSON.parse(textfield.textContent);
+       let parser = new window.__space.Parser(new window.__space.JsonParser());
+       let converter = new window.__space.Converter(new window.__space.FromJsonConverter());
+
+       let students = parser.parseString(textfield.textContent);
+
+       students.forEach(iter => {
+           converter.addStudent(iter);
+       });
+
+       let dept = new window.__space.Department(converter.getDepartment());
+       debugger;
+       document.getElementsByTagName("body")[0].appendChild(dept.node());
+       debugger;
     });
 
 }());

@@ -3,6 +3,7 @@
  */
 (function () {
     class baseFileDownLoaderImpl{
+        constructor(){}
         downloadFile(text,name){}
     }
 

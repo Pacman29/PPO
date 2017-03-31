@@ -3,14 +3,12 @@
  */
 (function () {
     class FileDownLoader extends window.__space.baseFileDownLoader{
-        constructor(Impl){
-            super(Impl);
+        constructor(){
+            super();
         }
-
-        setImpl(Impl){
-            this.impl = Impl;
+        json(){
+            return new window.__space.jsonFileDownLoader();
         }
-
     }
 
     window.__space.FileDownLoader = FileDownLoader;

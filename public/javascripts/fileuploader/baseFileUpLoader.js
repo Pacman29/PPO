@@ -4,11 +4,15 @@
 (function () {
     class baseFileUpLoader{
         constructor(Impl){
-            this.impl = Impl;
+            this.impl = Impl || undefined;
         }
 
         loadFile(File,callback){
             return this.impl.loadFile(File,callback);
+        }
+
+        setImpl(Impl){
+            this.impl = Impl;
         }
     }
 

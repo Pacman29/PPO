@@ -49,7 +49,7 @@
         }
     }
 
-    class DeleteStudent extends window,__space.baseCommand{
+    class DeleteStudent extends window.__space.baseCommand{
         constructor(Students,id){
             super("DeleteStudent_Gr");
             this.students = Students;
@@ -60,13 +60,14 @@
             if( (this.id) < 0 || (id >= this.students.length)){
                 return;
             }
-            this.deletestudent = this.students[id];
+            this._result = this.deletestudent = this.students[id];
             debugger;
             this.students.splice(id,1);
         }
 
         unexecute(){
-            this.students.splice(id,0,this.deletestudent);
+            debugger;
+            this.students.splice(id-1,0,this.deletestudent);
         }
     }
 
@@ -78,7 +79,7 @@
         }
 
         execute(){
-            this.students.push(this.student);
+            this._result = this.students.push(this.student);
         }
 
         unexecute(){
@@ -105,6 +106,21 @@
 
         unexecute(){
             this.students[this.id].undo();
+        }
+    }
+
+    class GetAllStudents extends window.__space.baseCommand{
+        constructor(Students){
+            super("GetAllStudents_Gr");
+            this._students = Students;
+        }
+
+        execute(){
+            let students = [];
+            this._students.forEach(iter => {
+                students.push(iter.get_field_copy());
+            });
+            return students;
         }
     }
 
@@ -154,6 +170,7 @@
                 this.fields,new window.__space.Student(student_json));
             command.execute();
             this.push_command(command);
+            return command.result();
         }
 
         deleteStudent(id){
@@ -168,6 +185,7 @@
             let command = new window.__space.GroupCommands["DeleteStudent"](this.fields,id)
             command.execute();
             this.push_command(command);
+            return command.result();
         }
 
         changeHead(id){
@@ -196,6 +214,25 @@
             command.execute();
             this.push_command(command);
         }
+
+        getAllStudents(){
+            let command = new window.__space.GroupCommands["GetAllStudents"](this.fields);
+            return command.execute();
+        }
+
+        _create_node(){
+            let div = document.createElement("div");
+            for(let i = 0; i<this.fields.length; ++i){
+                let item = this.fields[i];
+                let st = item.node();
+                div.appendChild(st);
+            }
+            return div;
+        }
+
+        redraw(){
+            return;
+        }
     }
 
     window.__space.Group = Group;
@@ -203,5 +240,6 @@
                                     AddStudent: AddStudent,
                                     DeleteStudent: DeleteStudent,
                                     ChangeHead: ChangeHead,
-                                    ChangeStudentField: ChangeStudentField};
+                                    ChangeStudentField: ChangeStudentField,
+                                    GetAllStudents: GetAllStudents};
 }());
