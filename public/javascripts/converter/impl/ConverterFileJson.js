@@ -30,5 +30,5 @@
         }
     }
 
-    window.__space.FromJsonConverter = ConverterFileJson;
+    window.__space.ConverterFileJson = ConverterFileJson;
 }());

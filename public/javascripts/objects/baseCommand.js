@@ -13,7 +13,7 @@
         get commandname() {
             return this._commandname;
         }
-        execute(){
+        execute(fields){
             throw "Execute not implements";
         };
         unexecute(){

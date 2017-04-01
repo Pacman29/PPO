@@ -3,16 +3,16 @@
  */
 (function () {
     class baseParser{
-        constructor(Impl){
-            this._impl = Impl;
+        constructor(){
+
         }
 
-        parseString(str){
-            return this._impl.parseString(str);
+        json(){
+            throw "Json is not impl";
         }
 
-        setImpl(Impl){
-            this.impl = Impl;
+        get(type){
+            throw "get is not impl";
         }
     }
 

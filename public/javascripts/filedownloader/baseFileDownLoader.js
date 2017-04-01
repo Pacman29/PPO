@@ -12,7 +12,7 @@
         }
 
         get(type){
-            return this[type].call();
+            throw "get is not impl";
         }
     }
 

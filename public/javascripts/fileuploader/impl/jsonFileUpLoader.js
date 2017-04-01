@@ -10,7 +10,7 @@
 
         loadFile(File,callback){
             this.reader.onload = function (e) {
-                callback(e.target.result);
+                callback(File,e.target.result);
             };
 
             this.reader.readAsText(File);

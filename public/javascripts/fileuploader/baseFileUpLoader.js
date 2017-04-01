@@ -3,16 +3,16 @@
  */
 (function () {
     class baseFileUpLoader{
-        constructor(Impl){
-            this.impl = Impl || undefined;
+        constructor(){
+
         }
 
-        loadFile(File,callback){
-            return this.impl.loadFile(File,callback);
+        json(){
+            throw "Json is not impl";
         }
 
-        setImpl(Impl){
-            this.impl = Impl;
+        get(type){
+            throw "get is not impl";
         }
     }
 
