@@ -11,6 +11,10 @@
             console.log("Create "+this.objname);
         }
 
+        execute_without_save(command){
+            return command.execute(this.fields);
+        }
+
         execute(command){
             let res = command.execute(this.fields);
             this.push_command(command);

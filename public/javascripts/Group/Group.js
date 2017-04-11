@@ -3,22 +3,18 @@
  */
 (function () {
     class ChangeGroupname_all extends window.__space.baseCommand{
-        constructor(Students,name){
+        constructor(Students,Group){
             super("ChangeGroupname_Gr");
-            this.students = Students;
-            this.name = name;
+            this._students = Students;
+            this._group = Group;
         }
 
         execute(){
-            this.students.forEach(iter => {
-                iter.set("Group",this.name);
-            })
+
         };
 
         unexecute(){
-            this.students.forEach(iter => {
-                iter.undo();
-            })
+
         };
     }
 
@@ -135,103 +131,6 @@
                 return iter.get("Role") === "head";
             });
             this._groupname = this.fields[0].get("Group");
-        }
-
-        setGroupname_all(name){
-            if(name === this._groupname){
-                return;
-            }
-            let command = new window.__space.GroupCommands["ChangeGroupname_all"](this.fields,name);
-            command.execute();
-            this._groupname = name;
-            this.push_command(command);
-        }
-
-        get groupname() {
-            return this._groupname;
-        }
-
-        addStudent(student_json){
-            if(this.havehead){
-                if(student_json["Role"] === "head"){
-                    throw "Group "+this._groupname+" have head";
-                }
-                student_json["Role"] = "student";
-            } else {
-                if(student_json["Role"] === "head"){
-                    student_json["Role"] = "head";
-                    this.havehead = true;
-                } else {
-                    student_json["Role"] = "student";
-                }
-            }
-            student_json["Group"] = this._groupname;
-            let command = new window.__space.GroupCommands["AddStudent"](
-                this.fields,new window.__space.Student(student_json));
-            command.execute();
-            this.push_command(command);
-            return command.result();
-        }
-
-        deleteStudent(id){
-            if( (id) < 0 || (id >= this.fields.length)){
-                throw "id is incorrect";
-            }
-
-            if(this.fields[id]["Role"] === "head"){
-                this.havehead = false;
-            }
-
-            let command = new window.__space.GroupCommands["DeleteStudent"](this.fields,id)
-            command.execute();
-            this.push_command(command);
-            return command.result();
-        }
-
-        changeHead(id){
-            let command = new window.__space.GroupCommands["ChangeHead"](this.fields,id)
-            command.execute();
-            this.push_command(command);
-        }
-
-        changeStudentField(id,fieldname,value){
-            if( (id) < 0 || (id >= this.fields.length)){
-                throw "id is incorrect";
-            };
-            if(fieldname === "Role"){
-                if(value === "head"){
-                    this.changeHead(id);
-                }
-                if(!(value === "student")){
-                    throw "new role is incorrect";
-                }
-            };
-            if(fieldname === "Group"){
-                throw "you must delete this student and create in new group";
-            };
-
-            let command = new window.__space.GroupCommands["ChangeStudentField"](this.fields,id,fieldname,value);
-            command.execute();
-            this.push_command(command);
-        }
-
-        getAllStudents(){
-            let command = new window.__space.GroupCommands["GetAllStudents"](this.fields);
-            return command.execute();
-        }
-
-        _create_node(){
-            let div = document.createElement("div");
-            for(let i = 0; i<this.fields.length; ++i){
-                let item = this.fields[i];
-                let st = item.node();
-                div.appendChild(st);
-            }
-            return div;
-        }
-
-        redraw(){
-            return;
         }
     }
 
