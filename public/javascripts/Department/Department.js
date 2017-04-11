@@ -2,184 +2,79 @@
  * Created by pacman29 on 29.03.17.
  */
 (function () {
-    class AddStudent extends window.__space.baseCommand{
-        constructor(groups,id_grp,student_json){
-            super("AddStudent_Dept");
-            this._groups = groups;
-            this._id_grp = id_grp;
-            this._student = student_json;
-            this._id_newst = null;
+    class AddGroup extends window.__space.baseCommand {
+        constructor(group){
+            super("AddGroup_Gr");
+            this._group = group;
         }
 
-        execute(){
-            if((this._id_grp < 0) && (this._id_grp > this._groups.length)){
-                throw "incorrect group id";
-            }
-
-            this._id_newst = this._groups[this._id_grp].addStudent(this._student);
+        execute(obj){
+            this._obj = obj;
+            this._save_id = obj._addGroup(this._group);
         }
 
         unexecute(){
-            debugger;
-            this._groups[this._id_grp].undo();
+            this._obj._deleteGroup(this._save_id);
         }
     }
 
-    class DeleteStudent extends window.__space.baseCommand{
-        constructor(groups,id_grp,id_st){
-            super("DeleteStudent_Dept");
-            this._groups = groups;
-            this._id_grp = id_grp;
-            this._id_st = id_st;
+    class DeleteGroup extends window.__space.baseCommand {
+        constructor(id){
+            super("AddGroup_Gr");
+            this._id = id;
         }
 
-        execute(){
-            if((this._id_grp < 0) && (this._id_grp > this._groups.length)){
-                throw "incorrect group id";
-            }
-
-            this._groups[this._id_grp].deleteStudent(this._id_st);
+        execute(obj){
+            this._obj = obj;
+            this._save_group = obj._deleteGroup(this._id);
         }
 
         unexecute(){
-            debugger;
-            this._groups[this._id_grp].undo();
-        }
-    }
-
-    class ChangeStudent extends window.__space.baseCommand{
-        constructor(groups,id_grp,id_st,field,value){
-            super("ChangeStudent_Dept");
-            this._groups = groups;
-            this._id_grp = id_grp;
-            this._id_st = id_st;
-            this._field = field;
-            this._value = value;
-        }
-
-        execute(){
-            if((this._id_grp < 0) && (this._id_grp > this._groups.length)){
-                throw "incorrect group id";
-            }
-
-            this._groups[this._id_grp].changeStudentField(this._id_st,this._field,this._value);
-        }
-
-        unexecute(){
-            debugger;
-            this._groups[this._id_grp].undo();
-        }
-    }
-
-    class ChangeGroupname extends window.__space.baseCommand{
-        constructor(groups,id_grp,newname){
-            super("ChangeGroupname_Dept");
-            this._groups = groups;
-            this._id_grp = id_grp;
-            this._newname = newname;
-        }
-
-        execute(){
-            if((this._id_grp < 0) && (this._id_grp > this._groups.length)){
-                throw "incorrect group id";
-            }
-            this._groups[this._id_grp].setGroupname_all(this._newname);
-        }
-
-        unexecute(){
-            debugger;
-            this._groups[this._id_grp].undo();
-        }
-    }
-
-    class DeleteGroup extends window.__space.baseCommand{
-        constructor(groups,id_grp){
-            super("DeleteGroup_Dept");
-            this._groups = groups;
-            this._id_grp = id_grp;
-        }
-
-        execute(){
-            if((this._id_grp < 0) && (this._id_grp > this._groups.length)){
-                throw "incorrect group id";
-            }
-
-            this._oldgroup = this._groups[this._id_grp];
-            this._groups.splice(this._id_grp,1);
-        }
-
-        unexecute(){
-            debugger;
-            this._groups.splice(this._id_grp-1,0,this._oldgroup);
-        }
-    }
-
-    class AddGroup extends window.__space.baseCommand{
-        constructor(groups,group_json){
-            super("AddGroup_Dept");
-            this._groups = groups;
-            this._group_json = group_json;
-        }
-
-        execute(){
-            this._newid = this._groups.push(new window.__space.Group(this._group_json));
-        }
-
-        unexecute(){
-            this._groups.splice(this._newid,1);
-        }
-    }
-
-    class GetAllStudents extends window.__space.baseCommand{
-        constructor(groups){
-            super("GetAllStudents_Dept");
-            this._groups = groups;
-        }
-
-        execute(){
-            let students = [];
-            debugger;
-            this._groups.forEach(iter =>{
-                let st = iter.getAllStudents();
-                st.forEach(student => {
-                    students.push(student);
-                });
-            });
-            return students;
+            this._obj._addGroup(this._save_group);
         }
     }
 
     class Department extends window.__space.baseObject{
-        constructor(){
-            super({},"Department");
+        constructor(opt){
+            let tmp = opt || {
+                _groups: []
+                };
+            super(tmp,"Department");
+        }
+
+        _addGroup(group){
+            return this.fields._groups.push(group) -1;
+        }
+
+        _deleteGroup(id){
+            if(id in this.fields._groups){
+                return this.fields._groups.splice(id,1);
+            }
+        }
+
+        addGroup(group){
+            return this.execute(new window.__space.DepartmentCommands["AddGroup"](group));
+        }
+
+        deleteGroup(id){
+            return this.execute(new window.__space.DepartmentCommands["DeleteGroup"](id));
+        }
+
+        getGroup(opt){
+            if(typeof opt === "Number") {
+                if (opt in this.fields._group) {
+                    return this.fields._group[id];
+                }
+                return undefined;
+            } else {
+                return this.fields._groups.find(iter => {
+                    return iter.compare(opt);
+                });
+            }
         }
     }
 
     window.__space.Department = Department;
-    window.__space.Department = Department;
-    window.__space.DepartmentCommands = {
-        AddStudent: AddStudent,
-        DeleteStudent: DeleteStudent,
-        ChangeStudent: ChangeStudent,
-        ChangeGroupname: ChangeGroupname,
-        DeleteGroup: DeleteGroup,
-        AddGroup: AddGroup,
-        GetAllStudents: GetAllStudents
-    }
+    window.__space.DepartmentCommands = {AddGroup, DeleteGroup}
 }());
 
-
-/*
-grps
-[
-    gr
-    [
-        st
-        {
-        }
-        {
-        }
-    ]
-]
-
- */

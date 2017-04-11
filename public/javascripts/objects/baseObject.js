@@ -4,19 +4,20 @@
 (function () {
     class baseObject{
         constructor(opt,objname){
-            this.undo_stack = new Array();
-            this.redo_stack = new Array();
+            this.undo_stack = new window.__space.UndoStack();
+            this.redo_stack = new window.__space.RedoStack();
             this.fields = opt || {};
             this.objname = objname;
             console.log("Create "+this.objname);
         }
 
         execute_without_save(command){
-            return command.execute(this.fields);
+            return command.execute(this);
         }
 
         execute(command){
-            let res = command.execute(this.fields);
+            debugger;
+            let res = command.execute(this);
             this.push_command(command);
             return res;
         }
