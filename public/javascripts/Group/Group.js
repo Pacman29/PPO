@@ -20,38 +20,42 @@
     }
 
     class ChangeHead extends window.__space.baseCommand{
-        constructor(id){
+        constructor(Student){
             super("ChangeRole_Gr");
-            this._id = id;
+            this._student = Student;
         }
 
         execute(obj){
             this._obj = obj;
-            this._save_id = obj._getHead(this._id);
-            return obj._setHead(this._id);
+            this._save_student = obj._getHead();
+            obj._setHead(this._student);
         }
 
         unexecute(){
-            this._obj._setHead(this._save_id);
+            this._obj._setHead(this._save_student);
         }
     }
 
     class DeleteStudent extends window.__space.baseCommand{
-        constructor(opt){
+        constructor(Student){
             super("DeleteStudent_Gr");
-            this._opt = opt;
+            this._student = Student;
+            this._head = false;
         }
 
         execute(obj){
             this._obj = obj;
-            this._save_head = obj._getHead();
-            this._save_student = obj._deleteStudent(opt);
-            return this._save_student;
+            if(obj._getHead() === this._student){
+                this._head = true;
+            }
+            this._save_student = obj._deleteStudent(this._student);
         }
 
         unexecute(){
             this._obj._addStudent(this._save_student);
-            this._obj._setHead(this._save_head);
+            if(this._head){
+                this._obj._setHead(this._save_student);
+            }
         }
     }
 
@@ -72,11 +76,12 @@
     }
 
     class Group extends window.__space.baseObject{
-        constructor(opt){
-            let tmp = opt || {
+        constructor(){
+            let tmp = {
                 _students: [],
                 _head: undefined,
-                _groupname: undefined
+                _groupname: undefined,
+                _department: undefined
             };
 
             super(tmp,"Group");
@@ -98,20 +103,22 @@
             return this._getGroupname();
         }
 
-        _setHead(id){
-            if((id >= this.fields._students.length) || id<0){
-                throw "id is incorrect";
+        _setHead(Student){
+            let st = this.fields._students.find(iter => {
+                return window.__space.Student.compare(iter,Student) === 0;
+            });
+            if(!st){
+                throw "student not exist";
             }
-
-            this.fields._head = id;
+            this.fields._head = st;
         }
 
         _getHead(){
             return this.fields._head;
         }
 
-        changeHead(id){
-            return this.execute(new window.__space.GroupCommands["ChangeHead"](id))
+        changeHead(Student){
+            return this.execute(new window.__space.GroupCommands["ChangeHead"](Student))
         }
 
         head(){
@@ -131,37 +138,40 @@
             }
         }
 
-        _addStudent(opt){
-            let id = this.fields._students.findIndex(iter => {
-                    return iter.compare(opt);
-                }) || null;
-
-            if(id){
-                throw "Student already exist";
+        _addStudent(Student){
+            let check = this.fields._students.find(iter => {
+                return window.__space.Student.compare(iter,Student) === 0;
+            });
+            if(check){
+                throw "student already exist";
             }
-            return this.fields._students.push(new window.__space.Student(opt)) - 1;
-        }
-
-        _deleteStudent(opt){
+            Student.setGroup(this);
             let id = this.fields._students.findIndex(iter => {
-                return iter.compare(opt);
-            }) || null;
+                    return window.__space.Student.compare(iter,Student) === 1;
+                }) + 1;
+            this.fields._students.splice(id,0,Student);
+        }
 
-            if(id){
-                if(id === this._getHead()){
-                    this.fields._head = null;
-                }
-                return this.fields._students.splice(id,1)[0].getJson();
+        _deleteStudent(Student){
+            let id = this.fields._groups.findIndex(iter => {
+                return window.__space.Student.compare(iter,Student) === 0;
+            });
+            if(id === -1){
+                throw "student not find";
             }
-            return null;
+            if(Student === this.fields._head){
+                this.fields._head = undefined;
+            }
+            this.fields._students[id].setGroup(undefined);
+            return this.fields._students.splice(id,1)[0];
         }
 
-        addStudent(opt){
-            return this.execute(new window.__space.GroupCommands["AddStudent"](opt));
+        addStudent(student){
+            return this.execute(new window.__space.GroupCommands["AddStudent"](student));
         }
 
-        deleteStudent(opt){
-            return this.execute(new window.__space.GroupCommands["DeleteStudent"](opt));
+        deleteStudent(student){
+            return this.execute(new window.__space.GroupCommands["DeleteStudent"](student));
         }
 
         getJson(){
@@ -175,27 +185,37 @@
             return tmp;
         }
 
-        getStudent(opt){
-            if(typeof opt === "Number"){
-                if(! opt in this.fields._students){
-                    return undefined;
-                }
-                return this.fields._students[opt];
-            } else {
-                return this.fields._students.find(iter=>{
-                    return iter.compare(opt);
-                });
-            }
+        getStudent(Name,Surname,SecondName){
+            return this.fields._students.find(iter => {
+                return iter.get("Name") === Name &&
+                        iter.get("Surname") === Surname &&
+                        iter.get("SecondName") === SecondName;
+            });
         }
 
         getStudents(){
-            return this.fields._students.map(iter=> {
-                return iter.getJson();
-            })
+            return this.fields._students;
+
         }
 
-        compare(name){
-            return name === this.fields._groupname;
+        static compare(a,b){
+            let a_name = a._getGroupname();
+            let b_name = b._getGroupname();
+            if(a_name > b_name){
+                return 1;
+            }
+            if(a_name < b_name){
+                return -1;
+            }
+            return 0;
+        }
+
+        setDepartment(Dept){
+            this.fields._department = Dept;
+        }
+
+        getDepartment(){
+            return this.fields._department;
         }
 
     }

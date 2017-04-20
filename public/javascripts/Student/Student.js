@@ -26,7 +26,8 @@
                     Surname: "",
                     Name: "",
                     SecondName: "",
-                    Rating: 0
+                    Rating: 0,
+                    Group: undefined
                 }, "Student");
 
             this.onchange = undefined;
@@ -77,13 +78,27 @@
             return new Student(this.getJson());
         }
 
-        compare(opt){
-            for(let key in this.fields){
-                if(opt[key] !== this.fields[key]){
-                    return false;
-                }
+        static compare(a,b){
+            if(a.get("Surname") > b.get("Surname")){
+                return 1;
             }
-            return true;
+            if(a.get("Surname") < b.get("Surname")){
+                return -1;
+            }
+            if(a.get("Name") > b.get("Name")){
+                return 1;
+            }
+            if(a.get("Name") < b.get("Name")){
+                return -1;
+            }
+            if(a.get("SecondName") > b.get("SecondName")){
+                return 1;
+            }
+            if(a.get("SecondName") < b.get("SecondName")){
+                return -1;
+            }
+            return 0;
+
         }
 
     }

@@ -3,74 +3,89 @@
  */
 (function () {
     class AddGroup extends window.__space.baseCommand {
-        constructor(group){
+        constructor(Group){
             super("AddGroup_Gr");
-            this._group = group;
+            this._group = Group;
         }
 
         execute(obj){
             this._obj = obj;
-            this._save_id = obj._addGroup(this._group);
+            obj._addGroup(this._group);
         }
 
         unexecute(){
-            this._obj._deleteGroup(this._save_id);
+            this._obj._deleteGroup(this._group);
         }
     }
 
     class DeleteGroup extends window.__space.baseCommand {
-        constructor(id){
-            super("AddGroup_Gr");
-            this._id = id;
+        constructor(Group){
+            super("DeleteGroup_Gr");
+            this._group = Group;
         }
 
         execute(obj){
             this._obj = obj;
-            this._save_group = obj._deleteGroup(this._id);
+            this._save_gr = obj._deleteGroup(this._group);
         }
 
         unexecute(){
-            this._obj._addGroup(this._save_group);
+            this._obj._addGroup(this._save_gr);
         }
     }
 
     class Department extends window.__space.baseObject{
-        constructor(opt){
-            let tmp = opt || {
-                _groups: []
-                };
-            super(tmp,"Department");
+        constructor(){
+            super({_groups:[]},"Department");
         }
 
-        _addGroup(group){
-            return this.fields._groups.push(group) -1;
-        }
-
-        _deleteGroup(id){
-            if(id in this.fields._groups){
-                return this.fields._groups.splice(id,1);
+        _addGroup(Group){
+            let check = this.fields._groups.find(iter => {
+                return window.__space.Group.compare(iter,Group) === 0;
+            });
+            if(check){
+                throw "group already exist";
             }
+            Group.setDepartment(this);
+            let id = this.fields._groups.findIndex(iter => {
+                return window.__space.Group.compare(iter,Group) === 1;
+            }) + 1;
+            this.fields._groups.splice(id,0,Group);
+        }
+
+        _deleteGroup(Group){
+            let id = this.fields._groups.findIndex(iter => {
+                return window.__space.Group.compare(iter,Group) === 0;
+            });
+            if(id === -1){
+                throw "group not find";
+            }
+            this.fields._groups[id].setDepartment(undefined);
+            return this.fields._groups.splice(id,1)[0];
         }
 
         addGroup(group){
             return this.execute(new window.__space.DepartmentCommands["AddGroup"](group));
         }
 
-        deleteGroup(id){
-            return this.execute(new window.__space.DepartmentCommands["DeleteGroup"](id));
+        deleteGroup(group){
+            return this.execute(new window.__space.DepartmentCommands["DeleteGroup"](group));
         }
 
-        getGroup(opt){
-            if(typeof opt === "Number") {
-                if (opt in this.fields._group) {
-                    return this.fields._group[id];
-                }
-                return undefined;
-            } else {
-                return this.fields._groups.find(iter => {
-                    return iter.compare(opt);
-                });
-            }
+        getGroup(Name){
+            return this.fields._groups.find(iter => {
+                return iter.getName() === Name;
+            });
+        }
+
+        getStudents(){
+            let tmp = [];
+            this.fields._groups.forEach(iter => {
+                iter.getStudents().forEach( iter_st => {
+                    tmp.push(iter_st);
+                } )
+            });
+            return tmp;
         }
     }
 
