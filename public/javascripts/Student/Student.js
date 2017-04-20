@@ -28,6 +28,16 @@
                     SecondName: "",
                     Rating: 0
                 }, "Student");
+
+            this.onchange = undefined;
+        }
+
+        execute(obj){
+            let res = super.execute(obj);
+            if(this.onchange){
+                this.onchange();
+            }
+            return res;
         }
 
         _setField(field,value){
@@ -81,10 +91,4 @@
     window.__space.Student = Student;
     window.__space.StudentCommands = {Set};
 
-
-    class StudentView{
-        constructor(student){
-            this._student = student;
-        }
-    }
 }());
