@@ -2,6 +2,19 @@
  * Created by pacman29 on 26.03.17.
  */
 (function () {
+    class ChangeGroup extends window.__space.baseCommand {
+        constructor(NewGroup){
+            super("ChangeGroup_St");
+            this._new_group = NewGroup;
+        }
+
+        execute(obj){
+            this._obj = obj;
+            obj._getField("Group")._deleteStudent(this._obj);
+            this._new_group._addStudent(obj);
+        }
+    }
+
     class Set extends window.__space.baseCommand {
         constructor(field,value){
             super("Set_St");
