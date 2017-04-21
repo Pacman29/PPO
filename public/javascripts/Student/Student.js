@@ -10,8 +10,54 @@
 
         execute(obj){
             this._obj = obj;
-            obj._getField("Group")._deleteStudent(this._obj);
+            this._old_group = obj._getField("Group");
+            this._is_head = this._obj === this._old_group._getHead();
+            this._old_group._deleteStudent(this._obj);
             this._new_group._addStudent(obj);
+        }
+
+        unexecute(){
+            this._new_group._deleteStudent(this._obj);
+            this._old_group._addStudent(this._obj);
+            if(this._is_head){
+                this._old_group._setHead(this._obj);
+            }
+        }
+    }
+
+    class ChangeHead extends window.__space.baseCommand{
+        constructor(){
+            super("ChangeRole_St");
+        }
+
+        execute(obj){
+            this._obj = obj;
+            this._save_student = this._obj._getField("Group");
+            this._obj._getField("Group")._setHead(this._obj);
+        }
+
+        unexecute(){
+            this._obj._getField("Group")._setHead(this._obj);
+        }
+    }
+
+    class DeleteStudent extends window.__space.baseCommand{
+        constructor(){
+            super("DeleteStudent_St");
+        }
+
+        execute(obj){
+            this._obj = obj;
+            this._group = obj._getField("Group");
+            this._is_head = this._group._getHead() === this._obj;
+            this._group._deleteStudent(this._obj);
+        }
+
+        unexecute(){
+            this._group._addStudent(this._obj);
+            if(this._is_head){
+                this._group._setHead(this._obj);
+            }
         }
     }
 
@@ -79,6 +125,21 @@
             return this._getField(field);
         }
 
+        setHead(){
+            let command = new window.__space.StudentCommands["ChangeHead"]();
+            return this.execute(command);
+        }
+
+        changeGroup(Group){
+            let command = new window.__space.StudentCommands["ChangeGroup"](Group);
+            return this.execute(command);
+        }
+
+        delete(){
+            let command = new window.__space.StudentCommands["DeleteStudent"]();
+            return this.execute(command);
+        }
+
         getJson(){
             let res = {};
             for(let key in this.fields){
@@ -117,6 +178,6 @@
     }
 
     window.__space.Student = Student;
-    window.__space.StudentCommands = {Set};
+    window.__space.StudentCommands = {Set,ChangeGroup,ChangeHead, DeleteStudent};
 
 }());

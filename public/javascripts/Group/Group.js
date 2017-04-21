@@ -19,45 +19,6 @@
         };
     }
 
-    class ChangeHead extends window.__space.baseCommand{
-        constructor(Student){
-            super("ChangeRole_Gr");
-            this._student = Student;
-        }
-
-        execute(obj){
-            this._obj = obj;
-            this._save_student = obj._getHead();
-            obj._setHead(this._student);
-        }
-
-        unexecute(){
-            this._obj._setHead(this._save_student);
-        }
-    }
-
-    class DeleteStudent extends window.__space.baseCommand{
-        constructor(Student){
-            super("DeleteStudent_Gr");
-            this._student = Student;
-            this._head = false;
-        }
-
-        execute(obj){
-            this._obj = obj;
-            if(obj._getHead() === this._student){
-                this._head = true;
-            }
-            this._save_student = obj._deleteStudent(this._student);
-        }
-
-        unexecute(){
-            this._obj._addStudent(this._save_student);
-            if(this._head){
-                this._obj._setHead(this._save_student);
-            }
-        }
-    }
 
     class AddStudent extends window.__space.baseCommand{
         constructor(student){
@@ -72,6 +33,22 @@
 
         unexecute(){
             this._obj._deleteStudent(this.student);
+        }
+    }
+
+    class DeleteGroup extends window.__space.baseCommand {
+        constructor(){
+            super("DeleteGroup_Gr");
+        }
+
+        execute(obj){
+            this._obj = obj;
+            this._department = this._obj.getDepartment();
+            this._department._deleteGroup(this._obj);
+        }
+
+        unexecute(){
+            this._department._addGroup(this._obj);
         }
     }
 
@@ -115,10 +92,6 @@
 
         _getHead(){
             return this.fields._head;
-        }
-
-        changeHead(Student){
-            return this.execute(new window.__space.GroupCommands["ChangeHead"](Student))
         }
 
         head(){
@@ -170,10 +143,6 @@
             return this.execute(new window.__space.GroupCommands["AddStudent"](student));
         }
 
-        deleteStudent(student){
-            return this.execute(new window.__space.GroupCommands["DeleteStudent"](student));
-        }
-
         getJson(){
             let tmp = [];
             for(let i in this.fields._students){
@@ -222,7 +191,5 @@
 
     window.__space.Group = Group;
     window.__space.GroupCommands = {ChangeGroupname,
-                                    AddStudent,
-                                    DeleteStudent,
-                                    ChangeHead}
+                                    AddStudent, DeleteGroup};
 }());

@@ -18,22 +18,6 @@
         }
     }
 
-    class DeleteGroup extends window.__space.baseCommand {
-        constructor(Group){
-            super("DeleteGroup_Gr");
-            this._group = Group;
-        }
-
-        execute(obj){
-            this._obj = obj;
-            this._save_gr = obj._deleteGroup(this._group);
-        }
-
-        unexecute(){
-            this._obj._addGroup(this._save_gr);
-        }
-    }
-
     class Department extends window.__space.baseObject{
         constructor(){
             super({_groups:[]},"Department");
@@ -90,6 +74,6 @@
     }
 
     window.__space.Department = Department;
-    window.__space.DepartmentCommands = {AddGroup, DeleteGroup}
+    window.__space.DepartmentCommands = {AddGroup};
 }());
 
