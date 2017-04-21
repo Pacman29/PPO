@@ -89,14 +89,13 @@
                     Group: undefined
                 }, "Student");
 
+            this.ondelete = undefined;
             this.onchange = undefined;
+            this.on = undefined;
         }
 
         execute(obj){
             let res = super.execute(obj);
-            if(this.onchange){
-                this.onchange();
-            }
             return res;
         }
 
