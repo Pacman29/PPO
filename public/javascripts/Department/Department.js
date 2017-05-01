@@ -71,6 +71,12 @@
             });
             return tmp;
         }
+
+        getGroupsName(){
+            return this.fields._groups.map((curr,index,arr) => {
+                return curr.name();
+            })
+        }
     }
 
     window.__space.Department = Department;

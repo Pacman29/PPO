@@ -124,6 +124,10 @@
             return this._getField(field);
         }
 
+        isHead(){
+            return this === this._getField("Group").head();
+        }
+
         setHead(){
             let command = new window.__space.StudentCommands["ChangeHead"]();
             return this.execute(command);
