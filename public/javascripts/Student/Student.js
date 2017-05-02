@@ -70,12 +70,18 @@
 
         execute(obj){
             this._obj = obj;
-            this._save_value = obj.getField();
+            this._save_value = obj._getField();
             obj._setField(this._field,this._value);
         }
 
         unexecute(){
             this._obj._setField(this._field,this._save_value);
+        }
+    }
+
+    class ChangeFields extends window.__space.baseGroupCommand{
+        constructor(){
+            super("ChangeFields_St");
         }
     }
 
@@ -176,6 +182,35 @@
             }
             return 0;
 
+        }
+
+        changeFields(Surname,
+                     Name,
+                     SecondName,
+                     Rating,
+                     Head,
+                     Group)
+        {
+            let commands = new ChangeFields();
+            if(Surname && (Surname !== this.fields.Surname)){
+                commands.add(new window.__space.StudentCommands["Set"]("Surname",Surname));
+            }
+            if(Name && (Name !== this.fields.Name)){
+                commands.add(new window.__space.StudentCommands["Set"]("Name",Name));
+            }
+            if(SecondName && (SecondName !== this.fields.SecondName)){
+                commands.add(new window.__space.StudentCommands["Set"]("SecondName",SecondName));
+            }
+            if(Rating && (Rating !== this.fields.Rating)){
+                commands.add(new window.__space.StudentCommands["Set"]("Rating",Rating));
+            }
+            if(Head && (Head !== this.isHead())){
+                commands.add(new window.__space.StudentCommands["ChangeHead"]);
+            }
+            if(Group && (Group !== this.fields.Group)){
+                commands.add(new window.__space.StudentCommands["ChangeGroup"](Group));
+            }
+            return this.execute(commands);
         }
 
     }

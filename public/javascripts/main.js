@@ -2,6 +2,25 @@
  * Created by pacman29 on 19.03.17.
  */
 (function () {
+    var dept = new window.__space.Department();
+    var group = new window.__space.Group();
+    group.changeName("test_groupname");
+    var group2 = new window.__space.Group();
+    group2.changeName("test_groupname2");
+    dept.addGroup(group);
+    dept.addGroup(group2);
+    var student = new window.__space.Student({
+        Surname: "Surname",
+        Name: "Name",
+        SecondName: "SecondName",
+        Rating: 0,
+        Group: undefined
+    });
+
+    group.addStudent(student);
+    student.setHead();
+
+    let st_view = new window.__space.StudentView(student);
 
     var btn_load = document.getElementById("btn_load");
     var btn_save = document.getElementById("btn_save");
@@ -41,4 +60,9 @@
        debugger;
     });
 
+
+    let app = document.getElementById("app");
+    debugger;
+    app.appendChild(st_view.root);
+    debugger;
 }());

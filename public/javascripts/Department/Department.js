@@ -58,7 +58,7 @@
 
         getGroup(Name){
             return this.fields._groups.find(iter => {
-                return iter.getName() === Name;
+                return iter.name === Name;
             });
         }
 
@@ -74,7 +74,7 @@
 
         getGroupsName(){
             return this.fields._groups.map((curr,index,arr) => {
-                return curr.name();
+                return curr.name;
             })
         }
     }

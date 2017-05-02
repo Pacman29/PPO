@@ -76,7 +76,7 @@
             return this.execute(new window.__space.GroupCommands["ChangeGroupname"](name));
         }
 
-        name(){
+        get name(){
             return this._getGroupname();
         }
 
@@ -118,7 +118,8 @@
             if(check){
                 throw "student already exist";
             }
-            Student.setGroup(this);
+            debugger;
+            Student._setField("Group",this);
             let id = this.fields._students.findIndex(iter => {
                     return window.__space.Student.compare(iter,Student) === 1;
                 }) + 1;
@@ -126,7 +127,8 @@
         }
 
         _deleteStudent(Student){
-            let id = this.fields._groups.findIndex(iter => {
+            debugger;
+            let id = this.fields._students.findIndex(iter => {
                 return window.__space.Student.compare(iter,Student) === 0;
             });
             if(id === -1){
@@ -135,7 +137,7 @@
             if(Student === this.fields._head){
                 this.fields._head = undefined;
             }
-            this.fields._students[id].setGroup(undefined);
+            this.fields._students[id]._setField("Group",undefined);
             return this.fields._students.splice(id,1)[0];
         }
 
