@@ -201,6 +201,7 @@
             if(SecondName && (SecondName !== this.fields.SecondName)){
                 commands.add(new window.__space.StudentCommands["Set"]("SecondName",SecondName));
             }
+            debugger;
             if(Rating && (Rating !== this.fields.Rating)){
                 commands.add(new window.__space.StudentCommands["Set"]("Rating",Rating));
             }

@@ -191,7 +191,7 @@
                 obj._surname.value,
                 obj._name.value,
                 obj._secondname.value,
-                obj._rating.value,
+                Number(obj._rating.value),
                 obj._role_checkbox.checked,
                 obj._student.get("Group").getDepartment().getGroup(Groupname)
             );
