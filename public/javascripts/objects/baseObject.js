@@ -3,11 +3,18 @@
  */
 (function () {
     class baseObject{
+        set view(value) {
+            this._view = new value(this);
+        }
+        get view() {
+            return this._view;
+        }
         constructor(opt,objname){
             this.undo_stack = new window.__space.UndoStack();
             this.redo_stack = new window.__space.RedoStack();
             this.fields = opt || {};
             this.objname = objname;
+            this._view = undefined;
             console.log("Create "+this.objname);
         }
 

@@ -13,6 +13,26 @@ input {
   border-color: black;
 }
 
+select:disabled {
+  opacity: 1;
+  color: black;
+  border-color: white;
+  font-style: inherit;
+}
+
+select {
+  border-color: black
+}
+
+input[type="checkbox"][disabled] {
+  opacity: 1;
+  color: black;
+  border-color: white;
+}
+
+input[type="checkbox"] {
+  border-color: black
+}
 a {
   color: #00B7FF;
 }

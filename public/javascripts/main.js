@@ -17,11 +17,20 @@
         Rating: 0,
         Group: undefined
     });
+    var student2 = new window.__space.Student({
+        Surname: "Surname2",
+        Name: "Name2",
+        SecondName: "SecondName2",
+        Rating: 0,
+        Group: undefined
+    });
 
     group.addStudent(student);
     student.setHead();
+    group.addStudent(student2);
 
-    let st_view = new window.__space.StudentView(student);
+    student.view = window.__space.StudentView;
+    student2.view = window.__space.StudentView;
 
     var btn_load = document.getElementById("btn_load");
     var btn_save = document.getElementById("btn_save");
@@ -62,8 +71,10 @@
     });
 
 
-    let app = document.getElementById("app");
-    debugger;
-    app.appendChild(st_view.root);
-    debugger;
+    let app = document.createElement("table");
+    let t = document.createElement("tbody");
+    t.appendChild(student.view.root);
+    t.appendChild(student2.view.root);
+    app.appendChild(t);
+    document.getElementsByTagName("body")[0].appendChild(app);
 }());

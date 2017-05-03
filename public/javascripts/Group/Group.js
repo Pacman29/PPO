@@ -145,6 +145,36 @@
             return this.execute(new window.__space.GroupCommands["AddStudent"](student));
         }
 
+        getMaxRating(){
+            let max = 0;
+            this.fields._students.forEach(iter => {
+                let tmp = iter.get("Rating");
+                if(tmp > max){
+                    max = tmp;
+                }
+            });
+            return max;
+        }
+
+        getMinRating(){
+            let min = 100;
+            this.fields._students.forEach(iter => {
+                let tmp = iter.get("Rating");
+                if(tmp < min){
+                    min = tmp;
+                }
+            });
+            return min;
+        }
+
+        getAvarageRating(){
+            let rating_sum = 0;
+            this.fields._students.forEach(iter => {
+               rating_sum += iter.get("Rating");
+            });
+            return rating_sum / this.fields._students.length;
+        }
+
         getJson(){
             let tmp = [];
             for(let i in this.fields._students){

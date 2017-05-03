@@ -131,7 +131,9 @@
         }
 
         isHead(){
-            return this === this._getField("Group").head();
+            let  res =  this === this._getField("Group").head();
+            debugger;
+            return res;
         }
 
         setHead(){
@@ -205,7 +207,7 @@
             if(Rating && (Rating !== this.fields.Rating)){
                 commands.add(new window.__space.StudentCommands["Set"]("Rating",Rating));
             }
-            if(Head && (Head !== this.isHead())){
+            if((Head !== undefined) && (Head !== this.isHead())){
                 commands.add(new window.__space.StudentCommands["ChangeHead"]);
             }
             if(Group && (Group !== this.fields.Group)){

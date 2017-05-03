@@ -3,9 +3,6 @@
  */
 (function () {
     class StudentView extends window.__space.baseView{
-        get root() {
-            return this._root;
-        }
         get student() {
             return this._student;
         }
@@ -16,7 +13,6 @@
         }
         constructor(student = undefined){
             super();
-            this.fields = {};
             this._root = document.createElement("div");
             this._root.setAttribute("class","student");
             this._student = student;
@@ -33,20 +29,21 @@
             this._save_btn.addEventListener("click",((obj) => {obj._changeStudent(obj)}).bind(null,obj));
             this._cancel_btn.addEventListener("click",((obj,bool) => {obj._changeStudentView(obj,bool)}).bind(null,obj,false));
             this._hide_btn.addEventListener("click",((obj) => {obj._closeStudent(obj)}).bind(null,obj));
+            this._delete_btn.addEventListener("click",((obj) => {obj._deleteStudent(obj)}).bind(null,obj));
 
             this._readInfo();
         }
 
         _createHead(){
             this._head = {};
-            this._head._node = document.createElement("div");
-            this._head._node.innerHTML = `<div class="head container row">
-                                            <div class="col-lg-5 head__surname"></div>
-                                            <div class="col-lg-5 head__name"></div>
-                                            <div class="col-lg-2">
-                                                <button class="head__button_open_student">Открыть</button>
-                                            </div>
-                                         </div>`;
+            this._head._node = document.createElement("table");
+            this._head._node.innerHTML = `<tr class="head container row">
+                                            <td class=" head__surname"></td>
+                                            <td class=" head__name"></td>
+                                            <td class="">
+                                                <div><button class="head__button_open_student">Открыть</button></div>
+                                            </td>
+                                         </tr>`;
             this._head._surname = this._head._node.getElementsByClassName("head__surname")[0];
             this._head._name = this._head._node.getElementsByClassName("head__name")[0];
             this._head._button = this._head._node.getElementsByClassName("head__button_open_student")[0];
@@ -55,13 +52,18 @@
 
         _createImmutable(){
             this._node = document.createElement("table");
+            this._node.setAttribute("class","table");
             this._node.innerHTML = `<tbody class="immutable container">
                                         <tr class="immutable__inputs"></tr>
+                                        <tr class="immutable__inputs"></tr>
                                         <tr class="immutable__controls">
+                                         <div class="row">
                                             <button class="immutable__change_btn">Изменить</button>
                                             <button class="immutable__save_btn">Сохранить</button>
                                             <button class="immutable__cancel_btn">Отменить</button>
+                                            <button class="immutable__delete_btn">Удалить</button>
                                             <button class="immutable__hide_btn">Скрыть</button>
+                                           </div>
                                         </tr>
                                      </tbody>`;
 
@@ -97,6 +99,9 @@
             this._hide_btn = this._node
                 .getElementsByClassName("immutable__hide_btn")[0];
             this._hide_btn.hidden = true;
+            this._delete_btn = this._node
+                .getElementsByClassName("immutable__delete_btn")[0];
+            this._delete_btn.hidden = true;
 
             this._surname.readonly= true;
             this._name.readonly = true;
@@ -181,10 +186,12 @@
                 obj._save_btn.style.display = "block";
                 obj._cancel_btn.style.display = "block";
                 obj._hide_btn.style.display = "block";
+                obj._delete_btn.style.display = "block"
             } else {
                 obj._change_btn.style.display = "block";
                 obj._save_btn.style.display = "none";
                 obj._cancel_btn.style.display = "none";
+                obj._delete_btn.style.display = "none";
                 obj._hide_btn.style.display = "block";
             }
         }
@@ -205,6 +212,12 @@
 
             obj._readInfo();
             obj._changeStudentView(obj,false);
+        }
+
+        _deleteStudent(obj){
+            obj._student.delete();
+            obj._root.style.display = "none" //возможно скрывать просто
+
         }
     }
 
