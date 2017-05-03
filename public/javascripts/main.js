@@ -9,6 +9,7 @@
     group2.changeName("test_groupname2");
     dept.addGroup(group);
     dept.addGroup(group2);
+    debugger;
     var student = new window.__space.Student({
         Surname: "Surname",
         Name: "Name",

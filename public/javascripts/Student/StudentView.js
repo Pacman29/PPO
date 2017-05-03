@@ -54,15 +54,16 @@
         }
 
         _createImmutable(){
-            this._node = document.createElement("div");
-            this._node.innerHTML = `<div class="immutable container">                                     
-                                        <div class="immutable__controls row">
-                                            <button class="immutable__change_btn col-lg-4">Изменить</button>
-                                            <button class="immutable__save_btn col-lg-4">Сохранить</button>
-                                            <button class="immutable__cancel_btn col-lg-4">Отменить</button>
-                                            <button class="immutable__hide_btn col-lg-4">Скрыть</button>
-                                        </div>
-                                     </div>`;
+            this._node = document.createElement("table");
+            this._node.innerHTML = `<tbody class="immutable container">
+                                        <tr class="immutable__inputs"></tr>
+                                        <tr class="immutable__controls">
+                                            <button class="immutable__change_btn">Изменить</button>
+                                            <button class="immutable__save_btn">Сохранить</button>
+                                            <button class="immutable__cancel_btn">Отменить</button>
+                                            <button class="immutable__hide_btn">Скрыть</button>
+                                        </tr>
+                                     </tbody>`;
 
             this._surname = {};
             this._name = {};
@@ -71,15 +72,15 @@
             this._group_select = {};
             this._role_checkbox = {};
 
-            let immutable = this._node.getElementsByClassName("immutable")[0];
+            let immutable = this._node.getElementsByClassName("immutable__inputs")[0];
             let immutable__controls = this._node.getElementsByClassName("immutable__controls")[0];
             debugger;
-            immutable.insertBefore(this._createInput(this,"immutable","_surname","Фамилия"),immutable__controls);
-            immutable.insertBefore(this._createInput(this,"immutable","_name","Имя"),immutable__controls);
-            immutable.insertBefore(this._createInput(this,"immutable","_secondname","Отчество"),immutable__controls);
-            immutable.insertBefore(this._createInput(this,"immutable","_rating","Рейтинг"),immutable__controls);
-            immutable.insertBefore(this._createSelect(this,"immutable","_group_select","Группа"),immutable__controls);
-            immutable.insertBefore(this._createCheckbox(this,"immutable","_role_checkbox","Староста"),immutable__controls);
+            immutable.appendChild(this._createInput(this,"immutable","_surname","Фамилия"));
+            immutable.appendChild(this._createInput(this,"immutable","_name","Имя"));
+            immutable.appendChild(this._createInput(this,"immutable","_secondname","Отчество"));
+            immutable.appendChild(this._createInput(this,"immutable","_rating","Рейтинг"));
+            immutable.appendChild(this._createSelect(this,"immutable","_group_select","Группа"));
+            immutable.appendChild(this._createCheckbox(this,"immutable","_role_checkbox","Староста"));
 
             this._group_select.disable = true;
             this._role_checkbox.disable = true;
@@ -138,8 +139,7 @@
             obj._node.hidden = false;
             obj._head._node.hidden = true;
 
-            obj._save_btn.hidden = true;
-            obj._cancel_btn.hidden = true;
+            obj._changeStudentView(obj,false);
         }
 
         _closeStudent(obj){
@@ -164,7 +164,7 @@
             this._surname.value = this._student.get("Surname");
             this._head._name.innerHTML = this._student.get("Name");
             this._name.value = this._student.get("Name");
-            this._secondname.value = this._student.get("Secondname");
+            this._secondname.value = this._student.get("SecondName");
             this._rating.value = this._student.get("Rating");
         }
 
@@ -176,10 +176,17 @@
             obj._group_select.disabled = !bool;
             obj._role_checkbox.disabled = !bool;
 
-            obj._change_btn.hidden = bool;
-            obj._save_btn.hidden = !bool;
-            obj._cancel_btn.hidden = !bool;
-            obj._hide_btn.hidden = !bool;
+            if(bool){
+                obj._change_btn.style.display = "none";
+                obj._save_btn.style.display = "block";
+                obj._cancel_btn.style.display = "block";
+                obj._hide_btn.style.display = "block";
+            } else {
+                obj._change_btn.style.display = "block";
+                obj._save_btn.style.display = "none";
+                obj._cancel_btn.style.display = "none";
+                obj._hide_btn.style.display = "block";
+            }
         }
 
         _changeStudent(obj){
@@ -196,7 +203,8 @@
                 obj._student.get("Group").getDepartment().getGroup(Groupname)
             );
 
-            this._readInfo();
+            obj._readInfo();
+            obj._changeStudentView(obj,false);
         }
     }
 

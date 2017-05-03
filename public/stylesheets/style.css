@@ -3,6 +3,16 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+input:disabled {
+  opacity: 1;
+  color: black;
+  border-color: white;
+  font-style: inherit;
+}
+input {
+  border-color: black;
+}
+
 a {
   color: #00B7FF;
 }

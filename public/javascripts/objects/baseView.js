@@ -13,30 +13,30 @@
         }
 
         _createInput(save_node, class_group, classname, name){
-            let div = document.createElement("div");
-            div.setAttribute("class",`${class_group}_${classname} row`);
-            div.innerHTML =`<div class="${class_group}__title col-lg-6">${name}:</div>
-                            <input type="text" class=${class_group}__val col-lg-6">`;
-            save_node[classname] = div.getElementsByClassName(`${class_group}__val`)[0];
-            return div;
+            let tr = document.createElement("tr");
+            tr.setAttribute("class",`${class_group}_${classname}`);
+            tr.innerHTML =`<td class="${class_group}__title">${name}:</td>
+                            <td><input type="text" class="${class_group}__val"></td>`;
+            save_node[classname] = tr.getElementsByClassName(`${class_group}__val`)[0];
+            return tr;
         }
 
         _createSelect(save_node,class_group,classname,name){
-            let div = document.createElement("div");
-            div.setAttribute("class",`${class_group}_${classname} row`);
-            div.innerHTML =`<div class="${class_group}__title col-lg-6">${name}:</div>
-                            <select class="${class_group}__select col-lg-6"></select>`;
-            save_node[classname] = div.getElementsByClassName(`${class_group}__select`)[0];
-            return div;
+            let tr = document.createElement("tr");
+            tr.setAttribute("class",`${class_group}_${classname}`);
+            tr.innerHTML =`<td class="${class_group}__title">${name}:</td>
+                           <td><select class="${class_group}__select"></select></td>`;
+            save_node[classname] = tr.getElementsByClassName(`${class_group}__select`)[0];
+            return tr;
         }
 
         _createCheckbox(save_node,class_group,classname,name){
-            let div = document.createElement("div");
-            div.setAttribute("class",`${class_group}_${classname} row`);
-            div.innerHTML =`<div class="${class_group}__title col-lg-6">${name}:</div>
-                            <input type="checkbox" class="${class_group}__checkbox col-lg-6">`;
-            save_node[classname] = div.getElementsByClassName(`${class_group}__checkbox`)[0];
-            return div;
+            let tr = document.createElement("tr");
+            tr.setAttribute("class",`${class_group}_${classname}`);
+            tr.innerHTML =`<td class="${class_group}__title">${name}:</td>
+                           <td><input type="checkbox" class="${class_group}__checkbox"></td>`;
+            save_node[classname] = tr.getElementsByClassName(`${class_group}__checkbox`)[0];
+            return tr;
         }
 
     }
