@@ -23,7 +23,6 @@
         }
 
         execute(command){
-            debugger;
             let res = command.execute(this);
             this.push_command(command);
             return res;

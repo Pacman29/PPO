@@ -21,6 +21,15 @@
             return tr;
         }
 
+        _createLable(save_node, class_group,classname, name){
+            let tr = document.createElement("tr");
+            tr.setAttribute("class",`${class_group}_${classname}`);
+            tr.innerHTML =`<td class="${class_group}__title">${name}:</td>
+                            <td class="${class_group}__val"></td>`;
+            save_node[classname] = tr.getElementsByClassName(`${class_group}__val`)[0];
+            return tr;
+        }
+
         _createSelect(save_node,class_group,classname,name){
             let tr = document.createElement("tr");
             tr.setAttribute("class",`${class_group}_${classname}`);

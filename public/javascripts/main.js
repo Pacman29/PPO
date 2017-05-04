@@ -32,6 +32,10 @@
     student.view = window.__space.StudentView;
     student2.view = window.__space.StudentView;
 
+    group.view = window.__space.GroupView;
+    group2.view = window.__space.GroupView;
+
+
     var btn_load = document.getElementById("btn_load");
     var btn_save = document.getElementById("btn_save");
     var btn_parse = document.getElementById("btn_parse");
@@ -73,8 +77,8 @@
 
     let app = document.createElement("table");
     let t = document.createElement("tbody");
-    t.appendChild(student.view.root);
-    t.appendChild(student2.view.root);
+    t.appendChild(group.view.root);
+    t.appendChild(group2.view.root);
     app.appendChild(t);
     document.getElementsByTagName("body")[0].appendChild(app);
 }());

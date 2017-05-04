@@ -55,7 +55,6 @@
             this._node.setAttribute("class","table");
             this._node.innerHTML = `<tbody class="immutable container">
                                         <tr class="immutable__inputs"></tr>
-                                        <tr class="immutable__inputs"></tr>
                                         <tr class="immutable__controls">
                                          <div class="row">
                                             <button class="immutable__change_btn">Изменить</button>
@@ -75,8 +74,6 @@
             this._role_checkbox = {};
 
             let immutable = this._node.getElementsByClassName("immutable__inputs")[0];
-            let immutable__controls = this._node.getElementsByClassName("immutable__controls")[0];
-            debugger;
             immutable.appendChild(this._createInput(this,"immutable","_surname","Фамилия"));
             immutable.appendChild(this._createInput(this,"immutable","_name","Имя"));
             immutable.appendChild(this._createInput(this,"immutable","_secondname","Отчество"));

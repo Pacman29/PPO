@@ -175,6 +175,10 @@
             return rating_sum / this.fields._students.length;
         }
 
+        getCount(){
+            return this.fields._students.length;
+        }
+
         getJson(){
             let tmp = [];
             for(let i in this.fields._students){
