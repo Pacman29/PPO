@@ -53,13 +53,17 @@
     }
 
     class Group extends window.__space.baseObject{
-        constructor(){
+        constructor(name = undefined){
             let tmp = {
                 _students: [],
                 _head: undefined,
-                _groupname: undefined,
+                _groupname: name,
                 _department: undefined
             };
+
+            if(typeof name === "string"){
+                tmp._groupname = name;
+            }
 
             super(tmp,"Group");
         }
@@ -73,6 +77,16 @@
         }
 
         changeName(name){
+            debugger;
+            if(name === this.fields._groupname){
+                return;
+            }
+            let test = name in this.fields._department.getGroupsName();
+            if(this.fields._department.getGroupsName().find((iter) => {
+                return name === iter;
+                })){
+                return;
+            }
             return this.execute(new window.__space.GroupCommands["ChangeGroupname"](name));
         }
 
@@ -124,10 +138,12 @@
                     return window.__space.Student.compare(iter,Student) === 1;
                 }) + 1;
             this.fields._students.splice(id,0,Student);
+            if(this._view){
+                this._view._readInfo();
+            }
         }
 
         _deleteStudent(Student){
-            debugger;
             let id = this.fields._students.findIndex(iter => {
                 return window.__space.Student.compare(iter,Student) === 0;
             });
@@ -138,6 +154,9 @@
                 this.fields._head = undefined;
             }
             this.fields._students[id]._setField("Group",undefined);
+            if(this._view){
+                this._view._readInfo();
+            }
             return this.fields._students.splice(id,1)[0];
         }
 
@@ -146,6 +165,9 @@
         }
 
         getMaxRating(){
+            if(this.fields._students.length === 0){
+                return undefined;
+            }
             let max = 0;
             this.fields._students.forEach(iter => {
                 let tmp = iter.get("Rating");
@@ -157,6 +179,9 @@
         }
 
         getMinRating(){
+            if(this.fields._students.length === 0){
+                return undefined;
+            }
             let min = 100;
             this.fields._students.forEach(iter => {
                 let tmp = iter.get("Rating");
@@ -168,6 +193,9 @@
         }
 
         getAvarageRating(){
+            if(this.fields._students.length === 0){
+                return undefined;
+            }
             let rating_sum = 0;
             this.fields._students.forEach(iter => {
                rating_sum += iter.get("Rating");
@@ -221,6 +249,10 @@
 
         getDepartment(){
             return this.fields._department;
+        }
+
+        delete(){
+            return this.execute(new window.__space.GroupCommands["DeleteGroup"]());
         }
 
     }

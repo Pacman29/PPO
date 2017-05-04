@@ -31,6 +31,7 @@
                 throw "group already exist";
             }
             Group.setDepartment(this);
+            debugger;
             let id = this.fields._groups.findIndex(iter => {
                 return window.__space.Group.compare(iter,Group) === 1;
             }) + 1;

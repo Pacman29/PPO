@@ -3,25 +3,23 @@
  */
 (function () {
     var dept = new window.__space.Department();
-    var group = new window.__space.Group();
-    group.changeName("test_groupname");
-    var group2 = new window.__space.Group();
-    group2.changeName("test_groupname2");
-    dept.addGroup(group);
+    var group = new window.__space.Group("test_groupname");
+    var group2 = new window.__space.Group("test_groupname2");
+    dept.addGroup(group);debugger;
     dept.addGroup(group2);
-    debugger;
+
     var student = new window.__space.Student({
         Surname: "Surname",
         Name: "Name",
         SecondName: "SecondName",
-        Rating: 0,
+        Rating: 25,
         Group: undefined
     });
     var student2 = new window.__space.Student({
         Surname: "Surname2",
         Name: "Name2",
         SecondName: "SecondName2",
-        Rating: 0,
+        Rating: 100,
         Group: undefined
     });
 

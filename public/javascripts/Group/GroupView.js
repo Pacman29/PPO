@@ -11,14 +11,17 @@
           this._root = document.createElement("div");
           this._root.setAttribute("class","Group");
 
+          this._students = {};
+          this._body = {};
+          this._head = {};
           this._createHeader();
           this._createBody();
           this._createStudentsTable();
           this._root.appendChild(this._head._node);
           this._root.appendChild(this._body._node);
-          this._body._node.style.display = "none";
           this._root.appendChild(this._students._node);
-          this._students._node.style.display = "none";
+          //this._students._node.hidden = true;
+          this._body._node.hidden = true;
 
           this._readInfo(this);
 
@@ -27,8 +30,9 @@
           this._body._change_btn.addEventListener("click",((obj,bool) => {obj._changeInfo(obj,bool)}).bind(null,obj,true));
           this._body._save_btn.addEventListener("click",((obj) => {obj._changeGroup(obj)}).bind(null,obj));
           this._body._cancel_btn.addEventListener("click",((obj,bool) => {obj._changeInfo(obj,bool)}).bind(null,obj,false));
-          //this._body._hide_btn.addEventListener("click",((obj) => {obj._closeGroup(obj)}).bind(null,obj));
+          this._body._hide_btn.addEventListener("click",((obj) => {obj._closeInfo(obj)}).bind(null,obj));
           this._body._delete_btn.addEventListener("click",((obj) => {obj._deleteGroup(obj)}).bind(null,obj));
+          this._body._addstudent_btn.addEventListener("click",((obj) => {obj._addStudent(obj)}).bind(null,obj));
       }
 
       _createHeader(){
@@ -53,6 +57,19 @@
 
       }
 
+      _addStudent(obj){
+          let newstudent = new window.__space.Student({
+              Surname: "undefined",
+              Name: "undefined",
+              SecondName: "undefined",
+              Rating: 0,
+              Group: undefined
+          });
+          obj._group.addStudent(newstudent);
+          newstudent.view = window.__space.StudentView;
+          obj._readInfo(obj);
+      }
+
       _createStudentsTable(){
           this._students = {};
           let table = document.createElement("table");
@@ -61,6 +78,22 @@
                                 
                              </tbody>`;
           this._students._node = table;
+      }
+
+      _setStudentsView(){
+          if(this._group.getCount() === 0){
+              return;
+          }
+          let Group__students = this._students._node.getElementsByClassName("Group__students")[0];
+          Group__students.childNodes.forEach(iter => {
+              iter.parentNode.removeChild(iter);
+          });
+
+          this._group.getStudents().forEach(iter => {
+              let node = iter.view.root;
+              node.style.display = "block";
+              Group__students.appendChild(node);
+          })
       }
 
       _createBody(){
@@ -111,31 +144,36 @@
 
       }
 
+
       _changeGroup(obj){
 
+          obj._group.changeName(obj._body._name.value);
+          obj._changeInfo(obj,false);debugger;
+          obj._readInfo(obj);
       }
 
-      _readInfo(obj){
+      _readInfo(obj = this){
           obj._head._name.innerHTML = obj._group.name;
           obj._body._name.value = obj._group.name;
           obj._body._maxrating.innerHTML = obj._group.getMaxRating();
           obj._body._minrating.innerHTML = obj._group.getMinRating();
           obj._body._averagerating.innerHTML = obj._group.getAvarageRating();
           obj._body._count.innerHTML = obj._group.getCount();
+          obj._setStudentsView();
 
       }
 
       _openInfo(obj){
           obj._readInfo(obj);
-          obj._head._node.style.display = "none";
-          obj._body._node.style.display = "block";
+          obj._head._node.hidden = true;
+          obj._body._node.hidden = false;
           obj._changeInfo(obj,false);
       }
 
       _closeInfo(obj){
           obj._readInfo(obj);
-          obj._body._node.style.display = "none";
-          obj._head._node.style.display = "block";
+          obj._body._node.hidden = true;
+          obj._head._node.hidden = false;
           obj._changeInfo(obj,false);
       }
 
@@ -155,6 +193,11 @@
               obj._body._delete_btn.style.display = "none";
               obj._body._addstudent_btn.style.display = "none";
           }
+      }
+
+      _deleteGroup(obj){
+          obj._group.delete();
+          obj._root.style.display = "none"
       }
   }
 
