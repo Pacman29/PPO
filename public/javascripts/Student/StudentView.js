@@ -13,7 +13,7 @@
         }
         constructor(student = undefined){
             super();
-            this._root = document.createElement("div");
+            this._root = document.createElement("tr");
             this._root.setAttribute("class","student");
             this._student = student;
 
@@ -31,20 +31,16 @@
             this._hide_btn.addEventListener("click",((obj) => {obj._closeStudent(obj)}).bind(null,obj));
             this._delete_btn.addEventListener("click",((obj) => {obj._deleteStudent(obj)}).bind(null,obj));
 
-            this._readInfo();
         }
 
         _createHead(){
             this._head = {};
             this._head._node = document.createElement("table");
+            this._head._node.setAttribute("class","table borderless");
             this._head._node.innerHTML = `<tr class="head container row">
-                                            <td class=" head__surname"></td>
-                                            <td class=" head__name"></td>
-                                            <td class="">
-                                                <div><button class="head__button_open_student">Открыть</button></div>
-                                            </td>
+                                            <a class=" head__surname head__name head__button_open_student"></a>
+                                            <a class=" head__name"></a>
                                          </tr>`;
-            this._head._surname = this._head._node.getElementsByClassName("head__surname")[0];
             this._head._name = this._head._node.getElementsByClassName("head__name")[0];
             this._head._button = this._head._node.getElementsByClassName("head__button_open_student")[0];
             this._root.appendChild(this._head._node);
@@ -52,18 +48,16 @@
 
         _createImmutable(){
             this._node = document.createElement("table");
-            this._node.setAttribute("class","table");
+            this._node.setAttribute("class","table borderless");
             this._node.innerHTML = `<tbody class="immutable container">
                                         <tr class="immutable__inputs"></tr>
-                                        <tr class="immutable__controls">
-                                         <div class="row">
+                                        <div class="immutable__controls row">
                                             <button class="immutable__change_btn">Изменить</button>
                                             <button class="immutable__save_btn">Сохранить</button>
                                             <button class="immutable__cancel_btn">Отменить</button>
                                             <button class="immutable__delete_btn">Удалить</button>
                                             <button class="immutable__hide_btn">Скрыть</button>
-                                           </div>
-                                        </tr>
+                                        </div>
                                      </tbody>`;
 
             this._surname = {};
@@ -128,7 +122,6 @@
         }
 
         _openStudent(obj){
-            debugger;
             obj._surname.disabled = true;
             obj._name.disabled  = true;
             obj._secondname.disabled = true;
@@ -162,9 +155,8 @@
             this._createRoleCheckbox();
             this._createGroupSelect();
 
-            this._head._surname.innerHTML = this._student.get("Surname");
             this._surname.value = this._student.get("Surname");
-            this._head._name.innerHTML = this._student.get("Name");
+            this._head._name.innerHTML = this._student.get("Surname")+" "+this._student.get("Name");
             this._name.value = this._student.get("Name");
             this._secondname.value = this._student.get("SecondName");
             this._rating.value = this._student.get("Rating");
@@ -197,7 +189,6 @@
             let tmp = obj._group_select.options;
             let Groupname = tmp[tmp.selectedIndex].innerHTML;
 
-            debugger;
             obj._student.changeFields(
                 obj._surname.value,
                 obj._name.value,

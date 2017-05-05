@@ -8,7 +8,7 @@
           super();
           this._group = group;
 
-          this._root = document.createElement("div");
+          this._root = document.createElement("tr");
           this._root.setAttribute("class","Group");
 
           this._students = {};
@@ -38,16 +38,13 @@
       _createHeader(){
           this._head = {};
           let table = document.createElement("table");
-          table.setAttribute("class","Group");
+          table.setAttribute("class","Group borderless");
           table.innerHTML = `<tbody class="Group__head">
-                                <th>
-                                    <td class="Group__head_name"></td>
+                                <tr>
                                     <td>
-                                        <div>
-                                            <button class="Group__head_open_btn">Открыть</button>
-                                        </div>
+                                        <a class="Group__head_name Group__head_open_btn"></a>
                                     </td>
-                                </th>
+                                </tr>
                              </tbody>
                              `;
 
@@ -65,26 +62,23 @@
               Rating: 0,
               Group: undefined
           });
-          obj._group.addStudent(newstudent);
           newstudent.view = window.__space.StudentView;
+          obj._group.addStudent(newstudent);
           obj._readInfo(obj);
       }
 
       _createStudentsTable(){
           this._students = {};
           let table = document.createElement("table");
-          table.setAttribute("class","Group");
+          table.setAttribute("class","Group borderless");
           table.innerHTML = `<tbody class="Group__students">
                                 
                              </tbody>`;
           this._students._node = table;
       }
 
-      _setStudentsView(){
-          if(this._group.getCount() === 0){
-              return;
-          }
-          let Group__students = this._students._node.getElementsByClassName("Group__students")[0];
+      _setStudentsView(obj){
+          let Group__students = obj._students._node.getElementsByClassName("Group__students")[0];
           Group__students.childNodes.forEach(iter => {
               iter.parentNode.removeChild(iter);
           });
@@ -99,20 +93,18 @@
       _createBody(){
           this._body = {};
           let table = document.createElement("table");
-          table.setAttribute("class","Group");
-          table.innerHTML = `<tbody class="Group__body">
-                                <th class="Group__body_info"></th>
-                                <tr class="Group__body_controls">
-                                         <div class="row">
-                                            <button class="Group__body_change_btn">Изменить</button>
-                                            <button class="Group__body_save_btn">Сохранить</button>
-                                            <button class="Group__body_cancel_btn">Отменить</button>
-                                            <button class="Group__body_delete_btn">Удалить</button>
-                                            <button class="Group__body_addstudent_btn">Добавить студента</button>
-                                            <button class="Group__body_hide_btn">Скрыть</button>
-                                           </div>
-                                        </tr>
+          table.setAttribute("class","Group table borderless");
+          table.innerHTML = `<tbody class="Group__body container">
+                                <tr class="Group__body_info"></tr>
+                                <div class="Group__body_controls row"></div>
                              </tbody>`;
+
+          table.getElementsByClassName("Group__body_controls")[0].innerHTML = `<button class="Group__body_change_btn">Изменить</button>
+                                   <button class="Group__body_save_btn">Сохранить</button>
+                                   <button class="Group__body_cancel_btn">Отменить</button>
+                                   <button class="Group__body_delete_btn">Удалить</button>
+                                   <button class="Group__body_addstudent_btn">Добавить студента</button>
+                                   <button class="Group__body_hide_btn">Скрыть</button>`;
 
           this._body._maxrating = {};
           this._body._minrating = {};
@@ -129,17 +121,12 @@
           immutable.appendChild(this._createLable(this._body,"Group__body","_averagerating","Средний рейтинг"));
           immutable.appendChild(this._createLable(this._body,"Group__body","_count","Число студентов"));
 
-          debugger;
 
           this._body._change_btn = this._body._node.getElementsByClassName("Group__body_change_btn")[0];
           this._body._save_btn = this._body._node.getElementsByClassName("Group__body_save_btn")[0];
-          this._body._save_btn.hidden = true;
           this._body._cancel_btn = this._body._node.getElementsByClassName("Group__body_cancel_btn")[0];
-          this._body._cancel_btn.hidden = true;
           this._body._delete_btn = this._body._node.getElementsByClassName("Group__body_delete_btn")[0];
-          this._body._delete_btn.hidden = true;
           this._body._addstudent_btn = this._body._node.getElementsByClassName("Group__body_addstudent_btn")[0];
-          this._body._addstudent_btn.hidden = true;
           this._body._hide_btn = this._body._node.getElementsByClassName("Group__body_hide_btn")[0];
 
       }
@@ -159,7 +146,7 @@
           obj._body._minrating.innerHTML = obj._group.getMinRating();
           obj._body._averagerating.innerHTML = obj._group.getAvarageRating();
           obj._body._count.innerHTML = obj._group.getCount();
-          obj._setStudentsView();
+          obj._setStudentsView(obj);
 
       }
 

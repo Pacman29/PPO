@@ -1,19 +1,4 @@
 extends layout
 
 block content
-
-  div.row.auto
-    div.col
-      input(id="btn_load" type="file")
-    div.col
-      button(id="btn_save")= "SaveFile"
-    div.col
-      button(id="btn_parse")= "Parse"
-
-  div
-    code#textfield= "this will be file text"
-
-
-  div(id="app")
-
   script(src="javascripts/main.js")

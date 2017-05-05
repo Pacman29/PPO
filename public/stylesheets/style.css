@@ -36,3 +36,27 @@ input[type="checkbox"] {
 a {
   color: #00B7FF;
 }
+
+table {
+  border-color: black;
+  border: 2px;
+  margin: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+button {
+  margin: 2px;
+}
+
+.Group__body_controls {
+  margin: 0px;
+}
+
+.immutable__controls {
+  margin: 0px;
+}
+
+td {
+  border-bottom: white;
+}

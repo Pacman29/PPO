@@ -9,9 +9,9 @@
         }
 
         loadFile(File,callback){
-            this.reader.onload = function (e) {
-                callback(File,e.target.result);
-            };
+            this.reader.onload =  ((e) => {
+                callback(e.target.result);
+            });
 
             this.reader.readAsText(File);
         }

@@ -19,11 +19,11 @@
         }
 
         execute_without_save(command){
-            return command.execute(this);
+            return command.execute();
         }
 
         execute(command){
-            let res = command.execute(this);
+            let res = command.execute();
             this.push_command(command);
             return res;
         }

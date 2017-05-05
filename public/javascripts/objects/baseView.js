@@ -9,6 +9,7 @@
         }
 
         get root() {
+            this._readInfo(this);
             return this._root;
         }
 
@@ -46,6 +47,10 @@
                            <td><input type="checkbox" class="${class_group}__checkbox"></td>`;
             save_node[classname] = tr.getElementsByClassName(`${class_group}__checkbox`)[0];
             return tr;
+        }
+
+        _readInfo(obj){
+
         }
 
     }

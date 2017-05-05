@@ -5,8 +5,9 @@
 (function () {
     class baseCommand{
 
-        constructor(commandname){
+        constructor(commandname,callobject){
             this._commandname = commandname || "baseCommand";
+            this._callobject = callobject;
             this._result = null;
             console.log(this.commandname);
         }
@@ -26,8 +27,8 @@
     }
 
     class baseGroupCommand extends baseCommand{
-        constructor(commandname){
-            super(commandname || "baseGroupCommand");
+        constructor(commandname,callobject){
+            super(commandname || "baseGroupCommand",callobject);
             this._result = [];
             this._commands =[];
         }
@@ -36,18 +37,18 @@
             this._commands.push(command);
         }
 
-        execute(obj){
+        execute(){
             if(this._commands.length === 0){
                 throw "No commands to execute";
             } else {
                 this._commands.forEach(iter => {
-                    iter.execute(obj);
+                    iter.execute();
                     this._result.push(iter.result);
                 });
             }
         };
 
-        unexecute(obj){
+        unexecute(){
             if(this._commands.length === 0){
                 throw "No commands to unexecute";
             } else {

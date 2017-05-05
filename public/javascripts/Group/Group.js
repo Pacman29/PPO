@@ -3,52 +3,49 @@
  */
 (function () {
     class ChangeGroupname extends window.__space.baseCommand{
-        constructor(name){
-            super("ChangeGroupname_Gr");
+        constructor(name,callobject){
+            super("ChangeGroupname_Gr",callobject);
             this._group_name = name;
         }
 
-        execute(obj){
-            this._obj = obj;
-            this._save_group_name = obj._getGroupname();
-            obj._setGroupname(this._group_name);
+        execute(){
+            this._save_group_name = this._callobject._getGroupname();
+            this._callobject._setGroupname(this._group_name);
         };
 
         unexecute(){
-            this._obj._setGroupname(this._save_group_name);
+            this._callobject._setGroupname(this._save_group_name);
         };
     }
 
 
     class AddStudent extends window.__space.baseCommand{
-        constructor(student){
-            super("AddStudent_Gr");
+        constructor(student,callobject){
+            super("AddStudent_Gr",callobject);
             this.student = student;
         }
 
-        execute(obj){
-            this._obj = obj;
-            return obj._addStudent(this.student);
+        execute(){
+            return this._callobject._addStudent(this.student);
         }
 
         unexecute(){
-            this._obj._deleteStudent(this.student);
+            this._callobject._deleteStudent(this.student);
         }
     }
 
     class DeleteGroup extends window.__space.baseCommand {
-        constructor(){
-            super("DeleteGroup_Gr");
+        constructor(callobject){
+            super("DeleteGroup_Gr",callobject);
         }
 
-        execute(obj){
-            this._obj = obj;
-            this._department = this._obj.getDepartment();
-            this._department._deleteGroup(this._obj);
+        execute(){
+            this._department = this._callobject.getDepartment();
+            this._department._deleteGroup(this._callobject);
         }
 
         unexecute(){
-            this._department._addGroup(this._obj);
+            this._department._addGroup(this._callobject);
         }
     }
 
@@ -57,7 +54,7 @@
             let tmp = {
                 _students: [],
                 _head: undefined,
-                _groupname: name,
+                _groupname: "undefined",
                 _department: undefined
             };
 
@@ -77,7 +74,6 @@
         }
 
         changeName(name){
-            debugger;
             if(name === this.fields._groupname){
                 return;
             }
@@ -87,7 +83,14 @@
                 })){
                 return;
             }
-            return this.execute(new window.__space.GroupCommands["ChangeGroupname"](name));
+            this.execute(new window.__space.GroupCommands["ChangeGroupname"](name,this));
+            let dep_view = this.fields._department.view;
+            if(this.fields._department){
+                this.fields._department.groups.sort(window.__space.Group.compare);
+            }
+            if(dep_view){
+                dep_view._readInfo();
+            }
         }
 
         get name(){
@@ -132,18 +135,19 @@
             if(check){
                 throw "student already exist";
             }
-            debugger;
             Student._setField("Group",this);
             let id = this.fields._students.findIndex(iter => {
-                    return window.__space.Student.compare(iter,Student) === 1;
+                    return window.__space.Student.compare(iter,Student) === -1;
                 }) + 1;
             this.fields._students.splice(id,0,Student);
+            this.fields._students.sort(window.__space.Student.compare);
             if(this._view){
                 this._view._readInfo();
             }
         }
 
         _deleteStudent(Student){
+
             let id = this.fields._students.findIndex(iter => {
                 return window.__space.Student.compare(iter,Student) === 0;
             });
@@ -153,15 +157,15 @@
             if(Student === this.fields._head){
                 this.fields._head = undefined;
             }
-            this.fields._students[id]._setField("Group",undefined);
+            this.fields._students.splice(id,1);
+            this.fields._students.sort(window.__space.Student.compare);
             if(this._view){
                 this._view._readInfo();
             }
-            return this.fields._students.splice(id,1)[0];
         }
 
         addStudent(student){
-            return this.execute(new window.__space.GroupCommands["AddStudent"](student));
+            return this.execute(new window.__space.GroupCommands["AddStudent"](student,this));
         }
 
         getMaxRating(){
@@ -252,7 +256,14 @@
         }
 
         delete(){
-            return this.execute(new window.__space.GroupCommands["DeleteGroup"]());
+            this.execute(new window.__space.GroupCommands["DeleteGroup"](this));
+            if(this.fields._department){
+                this.fields._department.groups.sort(window.__space.Group.compare);
+            }
+            let dep_view = this.fields._department.view;
+            if(dep_view){
+                dep_view._readInfo();
+            }
         }
 
     }

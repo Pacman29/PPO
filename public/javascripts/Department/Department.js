@@ -3,24 +3,31 @@
  */
 (function () {
     class AddGroup extends window.__space.baseCommand {
-        constructor(Group){
-            super("AddGroup_Gr");
+        constructor(Group,callobject){
+            super("AddGroup_Gr",callobject);
             this._group = Group;
         }
 
-        execute(obj){
-            this._obj = obj;
-            obj._addGroup(this._group);
+        execute(){
+            this._callobject._addGroup(this._group);
         }
 
         unexecute(){
-            this._obj._deleteGroup(this._group);
+            this._callobject._deleteGroup(this._group);
         }
     }
 
     class Department extends window.__space.baseObject{
         constructor(){
             super({_groups:[]},"Department");
+        }
+
+        get groups(){
+            return this.fields._groups;
+        }
+
+        get count(){
+            return this.fields._groups.length;
         }
 
         _addGroup(Group){
@@ -31,11 +38,15 @@
                 throw "group already exist";
             }
             Group.setDepartment(this);
-            debugger;
             let id = this.fields._groups.findIndex(iter => {
-                return window.__space.Group.compare(iter,Group) === 1;
+                return window.__space.Group.compare(iter,Group) === -1;
             }) + 1;
             this.fields._groups.splice(id,0,Group);
+            this.fields._groups.sort(window.__space.Group.compare);
+            if(this.view){
+                this.view._readInfo();
+            }
+
         }
 
         _deleteGroup(Group){
@@ -45,16 +56,15 @@
             if(id === -1){
                 throw "group not find";
             }
-            this.fields._groups[id].setDepartment(undefined);
-            return this.fields._groups.splice(id,1)[0];
+            this.fields._groups.splice(id,1);
+            this.fields._groups.sort(window.__space.Group.compare);
+            if(this.view){
+                this.view._readInfo();
+            }
         }
 
         addGroup(group){
-            return this.execute(new window.__space.DepartmentCommands["AddGroup"](group));
-        }
-
-        deleteGroup(group){
-            return this.execute(new window.__space.DepartmentCommands["DeleteGroup"](group));
+            return this.execute(new window.__space.DepartmentCommands["AddGroup"](group,this));
         }
 
         getGroup(Name){

@@ -3,6 +3,7 @@
  */
 (function () {
     class baseFileUpLoaderImpl{
+
         loadFile(File,callback){}
     }
 
