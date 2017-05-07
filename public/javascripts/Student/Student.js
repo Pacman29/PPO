@@ -9,7 +9,7 @@
         }
 
         execute(){
-            this._old_group = obj._getField("Group");
+            this._old_group = this._callobject._getField("Group");
             this._is_head = this._callobject === this._old_group._getHead();
             this._old_group._deleteStudent(this._callobject);
             this._new_group._addStudent(this._callobject);
