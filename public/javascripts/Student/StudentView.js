@@ -30,7 +30,16 @@
             this._cancel_btn.addEventListener("click",((obj,bool) => {obj._changeStudentView(obj,bool)}).bind(null,obj,false));
             this._hide_btn.addEventListener("click",((obj) => {obj._closeStudent(obj)}).bind(null,obj));
             this._delete_btn.addEventListener("click",((obj) => {obj._deleteStudent(obj)}).bind(null,obj));
-
+            this._rating.addEventListener("input",((obj) => {
+                let text = obj._rating.value;
+                if(text.match("^[1-9][0-9]?$|^100$|^[0-9]$")){
+                    obj._save_btn.style.display = "block";
+                    obj._rating.style.color = "black";
+                } else {
+                    obj._save_btn.style.display = "none";
+                    obj._rating.style.color = "red";
+                }
+            }).bind(null,obj));
         }
 
         _createHead(){
@@ -75,7 +84,6 @@
             immutable.appendChild(this._createSelect(this,"immutable","_group_select","Группа"));
             immutable.appendChild(this._createCheckbox(this,"immutable","_role_checkbox","Староста"));
 
-            this._rating.setAttribute("pattern","^[1-9][0-9]?$|^100$|^[0-9]$");
             this._group_select.disable = true;
             this._role_checkbox.disable = true;
 

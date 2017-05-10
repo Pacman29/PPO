@@ -151,7 +151,6 @@
         }
 
         _deleteStudent(Student){
-
             let id = this.fields._students.findIndex(iter => {
                 return window.__space.Student.compare(iter,Student) === 0;
             });

@@ -45,7 +45,7 @@
         }
 
         execute(){
-            this._group = obj._getField("Group");
+            this._group = this._callobject._getField("Group");
             this._is_head = this._group._getHead() === this._callobject;
             this._group._deleteStudent(this._callobject);
         }
@@ -170,10 +170,16 @@
         }
 
         static compare(a,b){
-            if(a.isHead())
+            if(a.isHead() && b.isHead()){
+                return 0;
+            }
+            if(a.isHead()){
                 return -1;
-            if(b.isHead())
+            }
+            if(b.isHead()){
                 return 1;
+            }
+
             if(a.get("Surname") > b.get("Surname")){
                 return 1;
             }
@@ -216,12 +222,13 @@
             if(Rating && (Rating !== this.fields.Rating)){
                 commands.add(new window.__space.StudentCommands["Set"]("Rating",Rating,this));
             }
-            if((Head !== undefined) && (Head !== this.isHead())){
-                commands.add(new window.__space.StudentCommands["ChangeHead"](this));
-            }
             if(Group && (Group !== this.fields.Group)){
                 commands.add(new window.__space.StudentCommands["ChangeGroup"](Group,this));
             }
+            if((Head !== undefined) && (Head !== this.isHead())){
+                commands.add(new window.__space.StudentCommands["ChangeHead"](this));
+            }
+
             this.execute(commands);
             debugger;
             if(this.fields.Group){
