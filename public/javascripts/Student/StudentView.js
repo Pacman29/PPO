@@ -75,6 +75,7 @@
             immutable.appendChild(this._createSelect(this,"immutable","_group_select","Группа"));
             immutable.appendChild(this._createCheckbox(this,"immutable","_role_checkbox","Староста"));
 
+            this._rating.setAttribute("pattern","^[1-9][0-9]?$|^100$|^[0-9]$");
             this._group_select.disable = true;
             this._role_checkbox.disable = true;
 
