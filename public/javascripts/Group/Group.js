@@ -105,6 +105,10 @@
                 throw "student not exist";
             }
             this.fields._head = st;
+            this.fields._students.sort(window.__space.Student.compare);
+            if(this._view){
+                this._view._readInfo();
+            }
         }
 
         _getHead(){
