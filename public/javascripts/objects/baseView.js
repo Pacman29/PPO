@@ -9,6 +9,7 @@
         }
 
         get root() {
+            debugger;
             this._readInfo(this);
             return this._root;
         }

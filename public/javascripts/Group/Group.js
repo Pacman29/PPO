@@ -40,12 +40,12 @@
         }
 
         execute(){
-            this._department = this._callobject.getDepartment();
-            this._department._deleteGroup(this._callobject);
+            this._student = this._callobject.getDepartment();
+            this._student._deleteGroup(this._callobject);
         }
 
         unexecute(){
-            this._department._addGroup(this._callobject);
+            this._student._addGroup(this._callobject);
         }
     }
 
@@ -55,7 +55,7 @@
                 _students: [],
                 _head: undefined,
                 _groupname: "undefined",
-                _department: undefined
+                _student: undefined
             };
 
             if(typeof name === "string"){
@@ -77,16 +77,16 @@
             if(name === this.fields._groupname){
                 return;
             }
-            let test = name in this.fields._department.getGroupsName();
-            if(this.fields._department.getGroupsName().find((iter) => {
+            let test = name in this.fields._student.getGroupsName();
+            if(this.fields._student.getGroupsName().find((iter) => {
                 return name === iter;
                 })){
                 return;
             }
             this.execute(new window.__space.GroupCommands["ChangeGroupname"](name,this));
-            let dep_view = this.fields._department.view;
-            if(this.fields._department){
-                this.fields._department.groups.sort(window.__space.Group.compare);
+            let dep_view = this.fields._student.view;
+            if(this.fields._student){
+                this.fields._student.groups.sort(window.__space.Group.compare);
             }
             if(dep_view){
                 dep_view._readInfo();
@@ -120,11 +120,11 @@
         }
 
         isHead(opt){
-            if(typeof opt === "Number"){
+            if(typeof opt === "number"){
                 if(! opt in this.fields._students){
                     return undefined;
                 }
-                return opt === this._getHead();
+                return this.fields._students[opt] === this._getHead();
             } else {
                 return this.fields._students.findIndex(iter=>{
                     return iter.compare(opt);
@@ -133,6 +133,7 @@
         }
 
         _addStudent(Student){
+            debugger;
             let check = this.fields._students.find(iter => {
                 return window.__space.Student.compare(iter,Student) === 0;
             });
@@ -218,8 +219,6 @@
             let tmp = [];
             for(let i in this.fields._students){
                 let tmp_st = this.fields._students[i].getJson();
-                tmp_st.Group = this._getGroupname();
-                tmp_st.Role =  (this.isHead(i)) ? "Head" : "Student";
                 tmp.push(tmp_st);
             }
             return tmp;
@@ -238,6 +237,10 @@
 
         }
 
+        get students(){
+            return this.fields._students;
+        }
+
         static compare(a,b){
             let a_name = a._getGroupname();
             let b_name = b._getGroupname();
@@ -251,19 +254,19 @@
         }
 
         setDepartment(Dept){
-            this.fields._department = Dept;
+            this.fields._student = Dept;
         }
 
         getDepartment(){
-            return this.fields._department;
+            return this.fields._student;
         }
 
         delete(){
             this.execute(new window.__space.GroupCommands["DeleteGroup"](this));
-            if(this.fields._department){
-                this.fields._department.groups.sort(window.__space.Group.compare);
+            if(this.fields._student){
+                this.fields._student.groups.sort(window.__space.Group.compare);
             }
-            let dep_view = this.fields._department.view;
+            let dep_view = this.fields._student.view;
             if(dep_view){
                 dep_view._readInfo();
             }

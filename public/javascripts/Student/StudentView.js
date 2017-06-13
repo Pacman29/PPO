@@ -115,6 +115,7 @@
 
         _createGroupSelect(){
             this._group_select.innerHTML = "";
+            debugger;
             let groups = this._student.get("Group").getDepartment().getGroupsName();
                 this._group_select.innerHTML += groups.map((curr,index,arr) => {
                     if(this._student.get("Group").name === curr){

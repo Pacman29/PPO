@@ -5,15 +5,15 @@
     class AddGroup extends window.__space.baseCommand {
         constructor(Group,callobject){
             super("AddGroup_Gr",callobject);
-            this._group = Group;
+            this._student = Group;
         }
 
         execute(){
-            this._callobject._addGroup(this._group);
+            this._callobject._addGroup(this._student);
         }
 
         unexecute(){
-            this._callobject._deleteGroup(this._group);
+            this._callobject._deleteGroup(this._student);
         }
     }
 
@@ -46,7 +46,6 @@
             if(this.view){
                 this.view._readInfo();
             }
-
         }
 
         _deleteGroup(Group){
@@ -87,6 +86,14 @@
             return this.fields._groups.map((curr,index,arr) => {
                 return curr.name;
             })
+        }
+
+        getJson(){
+            let result = [];
+            this.fields._groups.forEach(iter => {
+                result.push(iter.getJson());
+            });
+            return result;
         }
     }
 

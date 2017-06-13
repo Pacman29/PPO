@@ -45,15 +45,15 @@
         }
 
         execute(){
-            this._group = this._callobject._getField("Group");
-            this._is_head = this._group._getHead() === this._callobject;
-            this._group._deleteStudent(this._callobject);
+            this._student = this._callobject._getField("Group");
+            this._is_head = this._student._getHead() === this._callobject;
+            this._student._deleteStudent(this._callobject);
         }
 
         unexecute(){
-            this._group._addStudent(this._callobject);
+            this._student._addStudent(this._callobject);
             if(this._is_head){
-                this._group._setHead(this._callobject);
+                this._student._setHead(this._callobject);
             }
         }
     }
@@ -160,7 +160,12 @@
         getJson(){
             let res = {};
             for(let key in this.fields){
-                res[key] = this.fields[key];
+                if(key === "Group"){
+                    res[key] = this.fields[key]._getGroupname();
+                    res.Role =  (this.isHead()) ? "Head" : "Student";
+                } else {
+                    res[key] = this.fields[key];
+                }
             }
             return res;
         }

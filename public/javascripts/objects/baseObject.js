@@ -5,6 +5,11 @@
     class baseObject{
         set view(value) {
             this._view = new value(this);
+            if(document._plugins.length > 0){
+                document._plugins.forEach(plug => {
+                    plug.plugin(this);
+                })
+            }
         }
         get view() {
             return this._view;
@@ -52,6 +57,15 @@
                 this.redo_stack.splice(0,this.redo_stack.length);
             }
         }
+
+        execute_plugin(plugin){
+            plugin(this);
+        }
+
+        clear_plugin(clear_func){
+            clear_func(this);
+        }
+
     }
 
     window.__space.baseObject = baseObject;

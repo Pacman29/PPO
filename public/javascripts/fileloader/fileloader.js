@@ -3,7 +3,7 @@
  */
 (function () {
      function fileloader (dept,event){
-        let department = dept._department;
+        let department = dept._student;
 
         let loader_fab = new window.__space.FileUpLoader();
         let loader = loader_fab.get("json");
@@ -30,6 +30,7 @@
                     Rating: student.Rating
                 });
                 newstudent.view = window.__space.StudentView;
+                debugger;
                 group.addStudent(newstudent);
 
                 if(student.Role === "head"){

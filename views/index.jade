@@ -1,4 +1,12 @@
 extends layout
 
 block content
+  script(src="javascripts/Plugins/plugin-download.js")
+  script(src="javascripts/Plugins/plugin-background.js")
+  div.row
+    span= "Загрузка плагина: "
+    select(class="plugin__select")
+      option.plugin-load__option= "не загружен"
+      option.plugin-load__option= "plugin-download"
+      option.plugin-load__option= "plugin-background"
   script(src="javascripts/main.js")

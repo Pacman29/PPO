@@ -6,7 +6,7 @@
   class GroupView extends window.__space.baseView{
       constructor(group = undefined){
           super();
-          this._group = group;
+          this._student = group;
 
           this._root = document.createElement("tr");
           this._root.setAttribute("class","Group");
@@ -63,8 +63,13 @@
               Group: undefined
           });
           newstudent.view = window.__space.StudentView;
-          obj._group.addStudent(newstudent);
+          obj._student.addStudent(newstudent);
           obj._readInfo(obj);
+          if(document._plugins.length > 0){
+              document._plugins.forEach(iter => {
+                  iter.plugin(newstudent);
+              })
+          }
       }
 
       _createStudentsTable(){
@@ -83,7 +88,7 @@
               iter.parentNode.removeChild(iter);
           });
 
-          this._group.getStudents().forEach(iter => {
+          this._student.getStudents().forEach(iter => {
               let node = iter.view.root;
               node.style.display = "block";
               Group__students.appendChild(node);
@@ -134,18 +139,18 @@
 
       _changeGroup(obj){
 
-          obj._group.changeName(obj._body._name.value);
+          obj._student.changeName(obj._body._name.value);
           obj._changeInfo(obj,false);debugger;
           obj._readInfo(obj);
       }
 
       _readInfo(obj = this){
-          obj._head._name.innerHTML = obj._group.name;
-          obj._body._name.value = obj._group.name;
-          obj._body._maxrating.innerHTML = obj._group.getMaxRating();
-          obj._body._minrating.innerHTML = obj._group.getMinRating();
-          obj._body._averagerating.innerHTML = obj._group.getAvarageRating();
-          obj._body._count.innerHTML = obj._group.getCount();
+          obj._head._name.innerHTML = obj._student.name;
+          obj._body._name.value = obj._student.name;
+          obj._body._maxrating.innerHTML = obj._student.getMaxRating();
+          obj._body._minrating.innerHTML = obj._student.getMinRating();
+          obj._body._averagerating.innerHTML = obj._student.getAvarageRating();
+          obj._body._count.innerHTML = obj._student.getCount();
           obj._setStudentsView(obj);
 
       }
@@ -183,7 +188,7 @@
       }
 
       _deleteGroup(obj){
-          obj._group.delete();
+          obj._student.delete();
           obj._root.style.display = "none"
       }
   }

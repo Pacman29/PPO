@@ -12,7 +12,7 @@
       }
       constructor(department = undefined){
           super();
-          this._department = department;
+          this._student = department;
           this._head = {};
           this._body = {};
           this._root = document.createElement("table");
@@ -64,7 +64,7 @@
 
       _readInfo(obj = this){
           obj._clearGroups(obj);
-          obj._department.groups.forEach(iter => {
+          obj._student.groups.forEach(iter => {
               let node = iter.view.root;
               node.style.display = "block";
               obj._body._node.appendChild(node);
@@ -81,18 +81,18 @@
       _addGroup(obj){
           let newgroup = new window.__space.Group();
           newgroup.view = window.__space.GroupView;
-          this._department.addGroup(newgroup);
+          this._student.addGroup(newgroup);
           this._readInfo(obj);
       }
 
       _undo(obj){
           debugger;
-          this._department.undo();
+          this._student.undo();
           this._readInfo(obj);
       }
 
       _redo(obj){
-          this._department.redo();
+          this._student.redo();
           this._readInfo(obj);
       }
   }
